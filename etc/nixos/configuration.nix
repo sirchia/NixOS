@@ -121,13 +121,17 @@
     # interactiveShellInit = ''
     #   set fish_greeting "Welcome to fish shell!"
     # '';
-    };
+  };
+
+  programs.starship = {
+    enable = true;
+  };
 
   # System Packages
   environment.systemPackages = with pkgs; [
     (pkgs.writeScriptBin "sudo" ''exec doas "$@"'')
     vim
-    gitMinimal
+    git
     git-crypt
     tmux
     mergerfs
