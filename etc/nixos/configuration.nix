@@ -134,6 +134,7 @@
     git
     git-crypt
     tmux
+    z-lua
     mergerfs
     iotop
     htop
@@ -327,7 +328,7 @@
       #"--update-input"
       #"nixpkgs"
       "-L" # print build logs
-      #"--commit-lock-file"
+      "--commit-lock-file"
     ];
     dates = "Sat 02:00";
     randomizedDelaySec = "45min";
