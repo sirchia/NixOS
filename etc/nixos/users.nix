@@ -21,7 +21,7 @@ in
     # This gives a default empty password
     # initialHashedPassword = "";
     # Have moved below line to impermanence.nix
-    passwordFile = "/persist/passwords/sirchia";
+    hashedPasswordFile = "/persist/passwords/sirchia";
     openssh.authorizedKeys.keys = [ "${mysshkey}" ];
     # Per user packages
     # packages = with pkgs; [ nix-prefetch-docker ];
@@ -36,7 +36,7 @@ in
     # This gives a default empty password
     # initialHashedPassword = "";
     # Have moved below line to impermanence.nix
-    passwordFile = "/persist/passwords/functionary";
+    hashedPasswordFile = "/persist/passwords/functionary";
   };
   # User account
   users.users.timemachine = {
@@ -45,7 +45,7 @@ in
     # This gives a default empty password
     # initialHashedPassword = "";
     # Have moved below line to impermanence.nix
-    passwordFile = "/persist/passwords/timemachine";
+    hashedPasswordFile = "/persist/passwords/timemachine";
   };
 
   users.groups.sirchia.gid = 1000;
