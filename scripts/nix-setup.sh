@@ -87,7 +87,9 @@ function install_nix {
     if [ "$key" == 'n' ]; then                                                                                      
         exit
     else 
-        zfs mount rootpool/home
+        zfs mount rootpool/home/functionary
+        zfs mount rootpool/home/sirchia
+        zfs mount rootpool/home/root
         nixos-install --flake /mnt/etc/nixos#server --root /mnt/
     fi
 }
