@@ -335,11 +335,31 @@
   };
 
   systemd.services = {
+    "notify-service-failure@" = {
+      enable = true;
+      description = "Send notifications when %i returns a failure";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "/persist/scripts/notify-service failure %i";
+      };
+    };
+
+    "notify-service-success@" = {
+      enable = true;
+      description = "Send notifications when %i returns a success";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "/persist/scripts/notify-service success %i";
+      };
+    };
+
     "sanoid-snapshot-health" = {
       enable = true;
       description = "Verify the health of Sanoid snapshots";
-      unitConfig.OnFailure="notify-service@%i.service";
-      unitConfig.OnSuccess="ping-uptime-kuma@hjV3uUh0tY.service";
+      unitConfig = {
+        OnFailure = "notify-service-failure@%i.service";
+        OnSuccess = "notify-service-success@%i.service";
+      };
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "/run/current-system/sw/bin/sanoid --run-dir=/var/run/sanoid-monitor --cache-dir=/var/cache/sanoid-monitor --monitor-snapshots";
@@ -349,7 +369,10 @@
     "boot-backup" = {
       enable = true;
       description = "Local backup of boot partition";
-      unitConfig.OnFailure="notify-service-failure@%i.service";
+      unitConfig = {
+        OnFailure = "notify-service-failure@%i.service";
+        OnSuccess = "notify-service-success@%i.service";
+      };
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "/run/current-system/sw/bin/rsync -a /boot/ /mnt/bootbackup";
@@ -359,8 +382,10 @@
     "syncoid-local-backup" = {
       enable = true;
       description = "Local backup of main disk";
-      unitConfig.OnFailure="notify-service-failure@%i.service";
-      unitConfig.OnSuccess = "ping-uptime-kuma@zgkU1or6WR.service";
+      unitConfig = {
+        OnFailure = "notify-service-failure@%i.service";
+        OnSuccess = "notify-service-success@%i.service";
+      };
       serviceConfig = {
         Type = "oneshot";
         Environment = "HOME=%h";
@@ -369,32 +394,18 @@
       };
     };
 
-    "ping-uptime-kuma@" = {
-      enable = true;
-      description = "Ping Uptime Kuma on successful timer execution";
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "/run/current-system/sw/bin/curl 'https://uptime.sirchia.nl/api/push/%i?status=up&msg=OK'";
-      };
-    };
-
-    "notify-service-failure@" = {
-      enable = true;
-      description = "Send notification when %i returns a failure";
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "/bin/sh -c '/run/current-system/sw/bin/apprise -t \"%i failure\" -b \"$(/run/current-system/sw/bin/journalctl -o cat -n 10 -u %i | head -n 5)\"'";
-      };
-    };
-
     sanoid.unitConfig.OnFailure = "notify-service-failure@%i.service";
-    #sanoid.serviceConfig.ExecStart = lib.mkForce "/run/current-system/sw/bin/sanoid --cron";
+    sanoid.unitConfig.OnSuccess = "notify-service-success@%i.service";
     snapraid-sync.unitConfig.OnFailure = "notify-service-failure@%i.service";
-    snapraid-sync.unitConfig.OnSuccess = "ping-uptime-kuma@bWJCPGvI6J.service";
+    snapraid-sync.unitConfig.OnSuccess = "notify-service-success@%i.service";
     snapraid-scrub.unitConfig.OnFailure = "notify-service-failure@%i.service";
+    snapraid-scrub.unitConfig.OnSuccess = "notify-service-success@%i.service";
     zfs-scrub.unitConfig.OnFailure = "notify-service-failure@%i.service";
+    zfs-scrub.unitConfig.OnSuccess = "notify-service-success@%i.service";
     zpool-trim.unitConfig.OnFailure = "notify-service-failure@%i.service";
+    zpool-trim.unitConfig.OnSuccess = "notify-service-success@%i.service";
     nixos-upgrade.unitConfig.OnFailure = "notify-service-failure@%i.service";
+    nixos-upgrade.unitConfig.OnSuccess = "notify-service-success@%i.service";
     nixos-upgrade.serviceConfig.ExecStartPre = "rm -f /persist/etc/nixos/flake.lock";
   };
 

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+function usage() {
+  echo -e "Usage:\nnotify-service <success|failure> <service-name>"
+  exit 1
+}
+
+PATH=$PATH:/run/current-system/sw/bin/
+
+if [ "$#" -ne 2 ] ; then
+  usage
+fi
+
+SERVICE_NAME=$2
+UPTIME_KUMA_ID=$(grep "^${SERVICE_NAME}=" /persist/etc/uptime-kuma-service-ids | cut -d"=" -f2)
+
+echo "Notifying $1 status for $SERVICE_NAME with Uptime Kuma ID $UPTIME_KUMA_ID"
+
+if [ "$UPTIME_KUMA_ID" = "" ] ; then
+  echo "Uptime Kuma ID missing for service: $SERVICE_NAME"
+  exit 1
+fi
+
+case $1 in
+  success)
+    STATUS=up
+    MESSAGE=OK
+    ;;
+  failure)
+    STATUS=down
+    MESSAGE=Failed
+    apprise -t "$SERVICE_NAME failure" -b "$(journalctl -o cat -n 10 -u $SERVICE_NAME | head -n 5)"
+    ;;
+  *)
+    usage
+    ;;
+esac
+
+curl "https://uptime.sirchia.nl/api/push/$UPTIME_KUMA_ID?status=$STATUS&msg=$MESSAGE"
