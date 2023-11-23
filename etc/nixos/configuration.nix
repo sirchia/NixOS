@@ -277,14 +277,16 @@
     #extraArgs = [ "--verbose" "--debug" ];
 
     datasets = {
-      "rootpool/home".useTemplate = [ "backup" ];
-      "rootpool/local/nix".useTemplate = [ "none" ];
+      "rootpool" = {
+        useTemplate = [ "none" ];
+        recursive = true;
+      };
+      "rootpool/home" = {
+        useTemplate = [ "backup" ];
+        recursive = true;
+        process_children_only = true;
+      };
       "rootpool/local/root".useTemplate = [ "temporary" ];
-      "rootpool/local/var/cache".useTemplate = [ "none" ];
-      "rootpool/local/var/lib/containers".useTemplate = [ "none" ];
-      "rootpool/local/var/lib/docker".useTemplate = [ "none" ];
-      "rootpool/local/var/lib/systemd/timers".useTemplate = [ "none" ];
-      "rootpool/local/var/log".useTemplate = [ "none" ];
       "rootpool/persist".useTemplate = [ "backup" ];
       "rootpool/workload".useTemplate = [ "temporary" ];
     };
