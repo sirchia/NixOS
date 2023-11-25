@@ -325,12 +325,12 @@
 
   system.autoUpgrade = {
     enable = true;
-    flake = "/persist/etc/nixos";
+    flake = "/etc/nixos";
     flags = [
       #"--update-input"
       #"nixpkgs"
       "-L" # print build logs
-      "--commit-lock-file"
+      #"--commit-lock-file"
     ];
     dates = "Sat 02:00";
     randomizedDelaySec = "45min";
@@ -408,7 +408,7 @@
     zpool-trim.unitConfig.OnSuccess = "notify-service-success@%i.service";
     nixos-upgrade.unitConfig.OnFailure = "notify-service-failure@%i.service";
     nixos-upgrade.unitConfig.OnSuccess = "notify-service-success@%i.service";
-    nixos-upgrade.serviceConfig.ExecStartPre = "rm -f /persist/etc/nixos/flake.lock";
+    nixos-upgrade.serviceConfig.ExecStartPre = "/run/current-system/sw/bin/rm -f /persist/etc/nixos/flake.lock";
   };
 
   # Prevent mount failure from falling back to emergency console
