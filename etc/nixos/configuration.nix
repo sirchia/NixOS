@@ -427,7 +427,7 @@
       description = "Hourly verification of Sanoid snapshot health";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "hourly";
+        OnCalendar = "*:02";
         Persistent = true;
         Unit = "sanoid-snapshot-health.service";
       };
