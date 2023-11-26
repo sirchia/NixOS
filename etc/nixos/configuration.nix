@@ -135,6 +135,8 @@
     enable = true;
   };
 
+  programs.nano.enable=false;
+
   # System Packages
   environment.systemPackages = with pkgs; [
     (pkgs.writeScriptBin "sudo" ''exec doas "$@"'')
