@@ -50,9 +50,9 @@ function generate_config {
         
     # create configuration
     echo "Generating Config"
-    nixos-generate-config --root /mnt
+    # nixos-generate-config --root /mnt
     # For disko we generate a config with the --no-filesystems option
-    #nixos-generate-config --no-filesystems --root /mnt
+    nixos-generate-config --no-filesystems --root /mnt
     echo
 
     # Copy over our nixos config

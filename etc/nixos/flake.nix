@@ -2,9 +2,8 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-23.05";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
-    #disko = { url = "github:nix-community/disko";
-    #disko = { url = "/media/disko";
-    #          inputs.nixpkgs.follows = "nixpkgs"; };
+    disko = { url = "github:nix-community/disko";
+              inputs.nixpkgs.follows = "nixpkgs"; };
     impermanence.url = "github:nix-community/impermanence";
     flake-programs-sqlite = {
       url = "github:wamserma/flake-programs-sqlite";
@@ -12,7 +11,7 @@
     };
   };
   
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, impermanence , ... }: 
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, impermanence, disko, ... }: 
     let
       system = "x86_64-linux";
       overlay-unstable = final: prev: {
@@ -46,7 +45,7 @@
 	    ];
           })
           ./configuration.nix
-          # disko.nixosModules.disko
+          disko.nixosModules.disko
           impermanence.nixosModules.impermanence
           inputs.flake-programs-sqlite.nixosModules.programs-sqlite
       ];

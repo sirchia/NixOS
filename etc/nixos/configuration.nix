@@ -11,9 +11,10 @@
       ./myparams.nix
       #./podman.nix
       ./docker.nix
-      #(import ./disko-config.nix {
-      #  disks = [ "/dev/disk/by-id/nvme-WD_BLACK_SN770_1TB_2334H2404956" ];
-      #})
+      (import ./disko-config.nix {
+        poolName = "rootpool";
+        disks = [ "/dev/disk/by-id/nvme-WD_BLACK_SN770_1TB_2334H2404956" ];
+      })
     ];
   
   ### Nix options
