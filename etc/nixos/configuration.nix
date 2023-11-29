@@ -72,6 +72,13 @@
       allowedTCPPorts = [ 22 53 80 443 ];
       allowedUDPPorts = [ 53 ];
     };
+
+    # bridge access to macvlan containers on localhost
+    macvlans.br-macvlan = {
+      interface = "enp2s0";
+      mode = "bridge";
+    };
+    interfaces.br-macvlan.ipv4.addresses = [ { address = "192.168.1.225"; prefixLength = 27; } ];
   };
 
 
