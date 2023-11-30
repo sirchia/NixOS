@@ -9,8 +9,8 @@
       ./impermanence.nix
       ./users.nix
       ./myparams.nix
-      #./podman.nix
-      ./docker.nix
+      ./podman.nix
+      # ./docker.nix
       (import ./disko-config.nix {
         poolName = "rootpool";
         disks = [ "/dev/disk/by-id/nvme-WD_BLACK_SN770_1TB_2334H2404956" ];
@@ -235,6 +235,7 @@
   services.samba = {
     enable = true;
     enableNmbd = false;
+    openFirewall = true;
     securityType = "user";
     extraConfig = ''
       workgroup = Home
@@ -417,6 +418,8 @@
     nixos-upgrade.unitConfig.OnFailure = "notify-service-failure@%i.service";
     nixos-upgrade.unitConfig.OnSuccess = "notify-service-success@%i.service";
     nixos-upgrade.serviceConfig.ExecStartPre = "/run/current-system/sw/bin/rm -f /persist/etc/nixos/flake.lock";
+
+    podman.environment.LOGGING = "--log-level=warning";
   };
 
   # Prevent mount failure from falling back to emergency console
