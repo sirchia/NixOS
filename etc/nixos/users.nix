@@ -9,7 +9,7 @@ in
   users.mutableUsers = false;
 
   users.users.root = {
-    passwordFile = "/persist/passwords/root";
+    hashedPasswordFile = "/persist/passwords/root";
   };
  
   # User account
