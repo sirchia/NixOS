@@ -9,12 +9,14 @@
       ./impermanence.nix
       ./users.nix
       ./myparams.nix
-      ./podman.nix
+      #./podman.nix
       # ./docker.nix
       (import ./disko-config.nix {
         poolName = "rootpool";
         disks = [ "/dev/disk/by-id/nvme-WD_BLACK_SN770_1TB_2334H2404956" ];
       })
+
+      ./container-services
     ];
   
   ### Nix options
@@ -151,6 +153,7 @@
     tree
     wget
     pkgs.unstable.apprise
+    inputs.compose2nix.packages.x86_64-linux.default
     file
     sanoid
     smartmontools

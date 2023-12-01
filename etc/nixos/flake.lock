@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "compose2nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1701218976,
+        "narHash": "sha256-ms5f70jnv+cdydgCzkNUPdlpJpA3KHDwa/HAW9gdgkE=",
+        "owner": "aksiksi",
+        "repo": "compose2nix",
+        "rev": "afbfd8da72159ff9b7f8395df3c517e452dac90d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aksiksi",
+        "repo": "compose2nix",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -88,6 +108,7 @@
     },
     "root": {
       "inputs": {
+        "compose2nix": "compose2nix",
         "disko": "disko",
         "flake-programs-sqlite": "flake-programs-sqlite",
         "impermanence": "impermanence",
