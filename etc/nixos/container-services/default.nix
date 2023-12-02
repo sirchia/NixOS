@@ -8,6 +8,7 @@
       ./networks.nix
       ./traefik.nix
       ./hass.nix
+      ./media.nix
     ];
 
   # System Packages
