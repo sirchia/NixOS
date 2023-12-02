@@ -5,3 +5,4 @@ etc/ssh/** filter=git-crypt diff=git-crypt
 etc/samba/passdb.tdb filter=git-crypt diff=git-crypt
 etc/uptime-kuma-service-ids filter=git-crypt diff=git-crypt
 passwords/** filter=git-crypt diff=git-crypt
+**/*.env filter=git-crypt diff=git-crypt

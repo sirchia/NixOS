@@ -6,6 +6,7 @@
   imports =
     [
       ./networks.nix
+      ./traefik.nix
     ];
 
   # System Packages
