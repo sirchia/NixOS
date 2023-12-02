@@ -10,6 +10,7 @@
       ./traefik.nix
       ./hass.nix
       ./media.nix
+      ./apps.nix
     ];
 
   # System Packages
