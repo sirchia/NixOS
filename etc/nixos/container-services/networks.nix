@@ -3,7 +3,7 @@
 
 {
   # Networks
-  systemd.services."podman-networks-macvlan_lan" = {
+  systemd.services."podman-network-macvlan_lan" = {
     path = [ pkgs.podman ];
     serviceConfig = {
       Type = "oneshot";

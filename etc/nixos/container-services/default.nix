@@ -7,6 +7,7 @@
     [
       ./networks.nix
       ./traefik.nix
+      ./hass.nix
     ];
 
   # System Packages
