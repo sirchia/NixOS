@@ -6,6 +6,7 @@
   imports =
     [
       ./networks.nix
+      ./infra.nix
       ./traefik.nix
       ./hass.nix
       ./media.nix

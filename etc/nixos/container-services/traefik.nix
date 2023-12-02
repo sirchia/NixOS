@@ -3,47 +3,6 @@
 
 {
   # Containers
-  virtualisation.oci-containers.containers."dockerproxy" = {
-    image = "docker.io/tecnativa/docker-socket-proxy";
-    environment = {
-      CONTAINERS = "1";
-      IMAGES = "1";
-      LOG_LEVEL = "warning";
-    };
-    volumes = [
-      "/run/podman/podman.sock:/var/run/docker.sock:rw"
-    ];
-    ports = [
-      "2375:2375/tcp"
-    ];
-    labels = {
-      "diun.enable" = "true";
-    };
-    log-driver = "journald";
-    extraOptions = [
-      "--network-alias=dockerproxy"
-      "--network=socket-proxy"
-    ];
-  };
-  systemd.services."podman-dockerproxy" = {
-    serviceConfig = {
-      Restart = lib.mkOverride 500 "always";
-    };
-    after = [
-      "podman-network-socket-proxy.service"
-      "podman.socket"
-    ];
-    requires = [
-      "podman-network-socket-proxy.service"
-      "podman.socket"
-    ];
-    partOf = [
-      "podman-compose-traefik-root.target"
-    ];
-    wantedBy = [
-      "podman-compose-traefik-root.target"
-    ];
-  };
   virtualisation.oci-containers.containers."traefik" = {
     image = "docker.io/traefik:latest";
     cmd = [
@@ -57,8 +16,8 @@
       "--providers.docker.exposedbydefault=false"
       "--providers.docker.endpoint=tcp://dockerproxy:2375"
       "--providers.docker.network=reverse-proxy"
-      #"--providers.docker.defaultRule=Host(`{{ normalize .Name }}.sirchia.nl`) && ClientIP(`192.168.1.0/24`,`127.0.0.1`,`172.16.0.0/12`,`10.0.0.0/8`, `100.64.0.0/10`)"
-      "--providers.docker.defaultRule=Host(`{{ index .Labels \"com.docker.compose.service\" }}.sirchia.nl`) && ClientIP(`192.168.1.0/24`,`127.0.0.1`,`172.16.0.0/12`,`10.0.0.0/8`, `100.64.0.0/10`)"
+      "--providers.docker.defaultRule=Host(`{{ normalize .Name }}.sirchia.nl`) && ClientIP(`192.168.1.0/24`,`127.0.0.1`,`172.16.0.0/12`,`10.0.0.0/8`, `100.64.0.0/10`)"
+      #"--providers.docker.defaultRule=Host(`{{ index .Labels \"com.docker.compose.service\" }}.sirchia.nl`) && ClientIP(`192.168.1.0/24`,`127.0.0.1`,`172.16.0.0/12`,`10.0.0.0/8`, `100.64.0.0/10`)"
       "--providers.file.directory=/etc/traefik/config.d"
       "--entrypoints.web.address=:80"
       "--entrypoints.web.http.redirections.entryPoint.to=websecure"
