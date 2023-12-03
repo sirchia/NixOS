@@ -29,8 +29,6 @@
     autoPrune.enable = true; 
     dockerCompat = true; 
     dockerSocket.enable = true;
-    # Required for container networking to be able to use names. 
-    defaultNetwork.settings.dns_enabled = true; 
   }; 
 
   virtualisation.oci-containers.backend = "podman"; 
