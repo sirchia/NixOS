@@ -106,6 +106,7 @@
     };
     log-driver = "journald";
     extraOptions = [
+      "--init"
       "--network-alias=grott"
       "--network=reverse-proxy"
     ];

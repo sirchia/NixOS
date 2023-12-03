@@ -384,6 +384,7 @@
     };
     log-driver = "journald";
     extraOptions = [
+      "--init"
       "--network-alias=plextraktwatch"
       "--network=reverse-proxy"
     ];
