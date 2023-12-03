@@ -89,24 +89,21 @@
     ];
   };
   virtualisation.oci-containers.containers."traefik-certs-dumper" = {
-    image = "docker.io/ldez/traefik-certs-dumper:latest";
-    entrypoint = ''
-      sh -c '
-        apk add jq
-        ; while ! [ -e /data/acme.json ]
-        || ! [ `jq ".[] | .Certificates | length" /data/acme.json` != 0 ]; do
-        sleep 1
-        ; done
-        && traefik-certs-dumper file --version v2 --watch --domain-subdir=true
-          --source /data/acme.json --dest /data/certs'
-    '';
+    image = "ghcr.io/kereis/traefik-certs-dumper:multi-arch-builds-alpine";
     volumes = [
-      "/workload/appdata/traefik/etc/acme:/data:rw"
+      "/workload/appdata/traefik/etc/acme/acme.json:/traefik/acme.json:ro"
+      "/workload/appdata/traefik-certs-dumper:/output:rw"
     ];
     log-driver = "journald";
     extraOptions = [
+      "--init"
       "--network-alias=traefik-certs-dumper"
       "--network=reverse-proxy"
+      "--healthcheck-command=pgrep dump"
+      "--healthcheck-interval=1m"
+      "--healthcheck-timeout=5s"
+      "--healthcheck-retries=3"
+      "--healthcheck-start-period=30s"
     ];
   };
   systemd.services."podman-traefik-certs-dumper" = {
