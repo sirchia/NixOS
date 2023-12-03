@@ -16,7 +16,6 @@
       "diun.enable" = "true";
       "traefik.enable" = "true";
       "traefik.http.services.dsmr.loadbalancer.server.port" = "80";
-      "com.docker.compose.service" = "dsmr"; # TODO
     };
     dependsOn = [
       "dsmrdb"
@@ -63,7 +62,6 @@
     labels = {
       "backup" = "postgresql";
       "diun.enable" = "true";
-      "com.docker.compose.service" = "dsmrdb"; # TODO
     };
     log-driver = "journald";
     extraOptions = [
@@ -232,7 +230,6 @@
       "diun.enable" = "true";
       "traefik.enable" = "true";
       "traefik.http.services.zwavejs.loadbalancer.server.port" = "8091";
-      "com.docker.compose.service" = "zwavejs"; # TODO
     };
     log-driver = "journald";
     extraOptions = [

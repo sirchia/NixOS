@@ -54,7 +54,6 @@
       "diun.enable" = "true";
       "traefik.enable" = "true";
       "traefik.http.routers.traefik.service" = "api@internal";
-      "com.docker.compose.service" = "traefik"; # TODO
     };
     dependsOn = [
       "dockerproxy"
