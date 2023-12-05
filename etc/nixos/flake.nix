@@ -13,25 +13,24 @@
 		compose2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
   
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, impermanence, disko, ... }: 
+  outputs = { self, nixpkgs, nixpkgs-unstable, impermanence, disko, ... }@inputs: 
     let
       system = "x86_64-linux";
-      overlay-unstable = final: prev: {
-        unstable = import nixpkgs-unstable {
-          inherit system;
-          config.allowUnfree = true;
-        };
-      };
+			specialArgs = {
+				pkgs-unstable = import nixpkgs-unstable {
+					inherit system;
+					config.allowUnfree = true;
+				};
+				inherit system;
+				inherit inputs;
+			};
     in 
   {
     nixosConfigurations.server = nixpkgs.lib.nixosSystem {
       inherit system; 
-      specialArgs = { inherit inputs; };
+      inherit specialArgs;
       modules = [
-        # Overlays-module makes "pkgs.unstable" available in configuration.nix
-        ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-unstable ]; })
-
-        # Patch Fish shell issue until Fish shell 3.6.2 or 3.7.0 is released
+        # Overlays-module to patch Fish shell issue until Fish shell 3.6.2 or 3.7.0 is released
 				({ config, pkgs, ... }: { nixpkgs.overlays = [
 					(final: prev: {
 						fish = prev.fish.overrideAttrs (o: {

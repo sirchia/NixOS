@@ -1,6 +1,6 @@
 # configuration.nix
 
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, pkgs-unstable, ... }:
 
 {
   imports =
@@ -152,7 +152,7 @@
     htop
     tree
     wget
-    pkgs.unstable.apprise
+    pkgs-unstable.apprise
     inputs.compose2nix.packages.x86_64-linux.default
     file
     sanoid
