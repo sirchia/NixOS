@@ -24,7 +24,6 @@
   # Re-use nixpkgs from flake for nix commands
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
-  nixpkgs.config.allowUnfree = true;
   # Enable flakes & new syntax
   nix.extraOptions = ''
     experimental-features = nix-command

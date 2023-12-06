@@ -24,23 +24,24 @@
 				inherit system;
 				inherit inputs;
 			};
+    
+      pkgs-bootstrap = import inputs.nixpkgs { inherit system; };
 
 			# create patched nixpkgs
-			nixpkgs-patched = (import nixpkgs { inherit system; }).applyPatches {
+			nixpkgs-patched = pkgs-bootstrap.applyPatches {
 				name = "nixpkgs-patched";
-				src = nixpkgs;
+				src = inputs.nixpkgs;
 				patches = [ 
-					(pkgs.fetchpatch {
-						name = "fix-oci-container-stop";
-						url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/248315.patch";
-						sha256 = "";
-					})
-
-					(pkgs.fetchpatch {
-						name = "fish 3.6.4 backport";
-						url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/272366.patch";
-						sha256 = "";
-					})
+          (pkgs-bootstrap.fetchpatch {
+                  name = "fix-oci-container-stop";
+                  url = "https://github.com/NixOS/nixpkgs/pull/248315.patch";
+                  sha256 = "sha256-MloB4h0nlyba88SAgdEVT9Ypxe31Hjo02oRnHtHIYZU=";
+          })
+          (pkgs-bootstrap.fetchpatch {
+                  name = "fish 3.6.4 backport";
+                  url = "https://github.com/NixOS/nixpkgs/pull/272366.patch";
+                  sha256 = "sha256-NV30bEdpwnCWsyAlqHRzFyIIKNOCTjALJSPU60Q1//U=";
+          })
        ];
 			};
 
@@ -51,8 +52,10 @@
 									 allowUnfreePredicate = (_: true); };
 			};
 
+      nixpkgs = (import "${nixpkgs-patched}/flake.nix").outputs { self = inputs.self; };
+
 			# configure lib
-			lib = nixpkgs.lib;
+			# lib = nixpkgs.lib;
     in 
   {
     nixosConfigurations.server = nixpkgs.lib.nixosSystem {
