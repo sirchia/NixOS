@@ -152,7 +152,7 @@
     htop
     tree
     wget
-    pkgs-unstable.apprise
+    apprise
     inputs.compose2nix.packages.x86_64-linux.default
     file
     sanoid

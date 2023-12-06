@@ -24,26 +24,57 @@
 				inherit system;
 				inherit inputs;
 			};
+
+			# create patched nixpkgs
+			nixpkgs-patched = (import nixpkgs { inherit system; }).applyPatches {
+				name = "nixpkgs-patched";
+				src = nixpkgs;
+				patches = [ 
+					(pkgs.fetchpatch {
+						name = "fix-oci-container-stop";
+						url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/248315.patch";
+						sha256 = "";
+					})
+
+					(pkgs.fetchpatch {
+						name = "fish 3.6.4 backport";
+						url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/272366.patch";
+						sha256 = "";
+					})
+       ];
+			};
+
+			# configure pkgs
+			pkgs = import nixpkgs-patched {
+				inherit system;
+				config = { allowUnfree = true;
+									 allowUnfreePredicate = (_: true); };
+			};
+
+			# configure lib
+			lib = nixpkgs.lib;
     in 
   {
     nixosConfigurations.server = nixpkgs.lib.nixosSystem {
       inherit system; 
       inherit specialArgs;
+      inherit pkgs; # Inherit the patched pkgs
+
       modules = [
-        # Overlays-module to patch Fish shell issue until Fish shell 3.6.2 or 3.7.0 is released
-				({ config, pkgs, ... }: { nixpkgs.overlays = [
-					(final: prev: {
-						fish = prev.fish.overrideAttrs (o: {
-							patches = (o.patches or [ ]) ++ [
-								(pkgs.fetchpatch {
-									name = "fix-zfs-completion.path";
-									url = "https://github.com/fish-shell/fish-shell/commit/85504ca694ae099f023ae0febb363238d9c64e8d.patch";
-									sha256 = "sha256-lA0M7E/Z0NjuvppC7GZA5rWdL7c+5l+3SF5yUe7nEz8=";
-								})
-							];
-						});
-					})
-				]; })
+#        # Overlays-module to patch Fish shell issue until Fish shell 3.6.2 or 3.7.0 is released
+#				({ config, pkgs, ... }: { nixpkgs.overlays = [
+#					(final: prev: {
+#						fish = prev.fish.overrideAttrs (o: {
+#							patches = (o.patches or [ ]) ++ [
+#								(pkgs.fetchpatch {
+#									name = "fix-zfs-completion.path";
+#									url = "https://github.com/fish-shell/fish-shell/commit/85504ca694ae099f023ae0febb363238d9c64e8d.patch";
+#									sha256 = "sha256-lA0M7E/Z0NjuvppC7GZA5rWdL7c+5l+3SF5yUe7nEz8=";
+#								})
+#							];
+#						});
+#					})
+#				]; })
 
         ./configuration.nix
         disko.nixosModules.disko
