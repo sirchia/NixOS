@@ -180,7 +180,7 @@
     ];
     wantedBy = [
       "podman-compose-root.target"
-      "multi-user.target"
+      "default.target"
     ];
   };
 }

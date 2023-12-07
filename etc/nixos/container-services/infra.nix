@@ -471,7 +471,7 @@
     partOf = [ "podman-compose-infra-root.target" ];
     wantedBy = [ 
       "podman-compose-root.target"
-      "multi-user.target"
+      "default.target"
     ];
   };
 }

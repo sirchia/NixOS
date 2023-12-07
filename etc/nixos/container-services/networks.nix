@@ -42,7 +42,10 @@
       podman network inspect socket-proxy || podman network create socket-proxy --opt isolate=true
     '';
     partOf = [ "podman-compose-root.target" ];
-    wantedBy = [ "podman-compose-root.target" ];
+    wantedBy = [ 
+      "podman-compose-root.target"
+      "default.target"
+    ];
   };
 
 }
