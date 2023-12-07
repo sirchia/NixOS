@@ -1,7 +1,7 @@
 { poolName ? "rootpool", disks ? [ "/dev/disk/by-id/nvme-WD_BLACK_SN770_1TB_2334H2404956" ], ...}: {
   disko.devices = {
     disk = {
-      backup = {
+      nixos = {
         type = "disk";
         device = builtins.elemAt disks 0;
         content = {
