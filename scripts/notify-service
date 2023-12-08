@@ -4,6 +4,8 @@ function usage() {
   echo -e "Usage:\nnotify-service <success|failure> <service-name>"
   exit 1
 }
+UPTIME_KUMA_URL=http://uptime.lan:3001
+#UPTIME_KUMA_URL=https://uptime.sirchia.nl
 
 PATH=$PATH:/run/current-system/sw/bin/
 
@@ -36,4 +38,4 @@ case $1 in
     ;;
 esac
 
-curl "https://uptime.sirchia.nl/api/push/$UPTIME_KUMA_ID?status=$STATUS&msg=$MESSAGE"
+curl "$UPTIME_KUMA_URL/api/push/$UPTIME_KUMA_ID?status=$STATUS&msg=$MESSAGE"

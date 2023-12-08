@@ -67,12 +67,12 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-socket-proxy.service"
       "podman-dockerproxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-socket-proxy.service"
       "podman-dockerproxy.service"
     ];
@@ -220,11 +220,11 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     partOf = [
@@ -266,11 +266,11 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     partOf = [
@@ -312,11 +312,11 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     partOf = [
@@ -352,11 +352,11 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     partOf = [
@@ -397,12 +397,12 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
       "mnt-disk4.mount"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
       "mnt-disk4.mount"
     ];
@@ -440,14 +440,14 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-socket-proxy.service"
       "podman-network-reverse-proxy.service"
       "podman-network-macvlan_lan.service"
       "podman-dockerproxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-socket-proxy.service"
       "podman-network-reverse-proxy.service"
       "podman-network-macvlan_lan.service"
@@ -471,7 +471,7 @@
     partOf = [ "podman-compose-infra-root.target" ];
     wantedBy = [ 
       "podman-compose-root.target"
-      "default.target"
+      "multi-user.target"
     ];
   };
 }

@@ -9,8 +9,6 @@
       ./impermanence.nix
       ./users.nix
       ./myparams.nix
-      #./podman.nix
-      # ./docker.nix
       (import ./disko-config.nix {
         poolName = "rootpool";
         disks = [ "/dev/disk/by-id/nvme-WD_BLACK_SN770_1TB_2334H2404956" ];
@@ -357,6 +355,8 @@
         Type = "oneshot";
         ExecStart = "/persist/scripts/notify-service failure %i";
       };
+      wants = [ "podman-uptime.service" ];
+      after = [ "podman-uptime.service" ];
     };
 
     "notify-service-success@" = {
@@ -366,6 +366,8 @@
         Type = "oneshot";
         ExecStart = "/persist/scripts/notify-service success %i";
       };
+      wants = [ "podman-uptime.service" ];
+      after = [ "podman-uptime.service" ];
     };
 
     "sanoid-snapshot-health" = {

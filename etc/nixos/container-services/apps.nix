@@ -32,11 +32,11 @@
     };
     after = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-apps-root.target"
@@ -68,11 +68,11 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     partOf = [
@@ -111,11 +111,11 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     partOf = [
@@ -153,11 +153,11 @@
       Restart = lib.mkOverride 500 "always";
     };
     after = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     requires = [
-      "workload.mount"
+      "zfs.target"
       "podman-network-reverse-proxy.service"
     ];
     partOf = [
@@ -180,7 +180,7 @@
     ];
     wantedBy = [
       "podman-compose-root.target"
-      "default.target"
+      "multi-user.target"
     ];
   };
 }

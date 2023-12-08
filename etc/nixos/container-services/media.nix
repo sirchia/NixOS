@@ -47,13 +47,13 @@
       "podman-network-macvlan_lan.service"
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-macvlan_lan.service"
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -90,11 +90,11 @@
     };
     after = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -129,12 +129,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -172,12 +172,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -215,12 +215,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -262,12 +262,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -304,11 +304,11 @@
     };
     after = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -356,13 +356,13 @@
       "podman-network-macvlan_lan.service"
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-macvlan_lan.service"
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -395,11 +395,11 @@
     };
     after = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -435,11 +435,11 @@
     };
     after = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -481,12 +481,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -524,12 +524,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -567,12 +567,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -610,12 +610,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -653,12 +653,12 @@
     after = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
       "mnt-storage.mount"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -695,11 +695,11 @@
     };
     after = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-media-root.target"
@@ -719,7 +719,7 @@
     partOf = [ "podman-compose-root.target" ];
     wantedBy = [ 
       "podman-compose-root.target"
-      "default.target"
+      "multi-user.target"
     ];
   };
 }

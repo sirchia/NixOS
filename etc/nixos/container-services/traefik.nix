@@ -73,12 +73,12 @@
     after = [
       "podman-network-socket-proxy.service"
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-socket-proxy.service"
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-traefik-root.target"
@@ -111,11 +111,11 @@
     };
     after = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     requires = [
       "podman-network-reverse-proxy.service"
-      "workload.mount"
+      "zfs.target"
     ];
     partOf = [
       "podman-compose-traefik-root.target"
@@ -137,7 +137,7 @@
     ];
     wantedBy = [
       "podman-compose-root.target"
-      "default.target"
+      "multi-user.target"
     ];
   };
 }

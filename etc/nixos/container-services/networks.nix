@@ -44,7 +44,7 @@
     partOf = [ "podman-compose-root.target" ];
     wantedBy = [ 
       "podman-compose-root.target"
-      "default.target"
+      "multi-user.target"
     ];
   };
 
