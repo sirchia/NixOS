@@ -4,13 +4,14 @@
 {
   # Containers
   virtualisation.oci-containers.containers."jellyfin" = {
-    image = "cr.hotio.dev/hotio/jellyfin";
+    image = "lscr.io/linuxserver/jellyfin:latest";
     environment = {
       JELLYFIN_PublishedServerUrl = "https://jellyfin.sirchia.nl:443";
       PGID = "1003";
       PUID = "1003";
       TZ = "Europe/Amsterdam";
       UMASK = "002";
+      DOCKER_MODS = "linuxserver/mods:jellyfin-opencl-intel";
     };
     volumes = [
       "/mnt/storage/Audiobooks:/data/Audiobooks:rw"

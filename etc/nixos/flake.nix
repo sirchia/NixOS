@@ -49,7 +49,11 @@
 			pkgs = import nixpkgs-patched {
 				inherit system;
 				config = { allowUnfree = true;
-									 allowUnfreePredicate = (_: true); };
+									 allowUnfreePredicate = (_: true); 
+                   packageOverrides = pkgs: {
+                     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+                   };
+        };
 			};
 
       nixpkgs = (import "${nixpkgs-patched}/flake.nix").outputs { self = inputs.self; };
@@ -79,6 +83,7 @@
 					})
 				]; })
 
+        ./hosts/server
         ./configuration.nix
         disko.nixosModules.disko
         impermanence.nixosModules.impermanence
