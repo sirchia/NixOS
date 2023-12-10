@@ -14,6 +14,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.dsmr.loadbalancer.server.port" = "80";
     };
@@ -30,6 +31,7 @@
       "--healthcheck-interval=10s"
       "--healthcheck-timeout=5s"
       "--healthcheck-retries=10"
+      "--sdnotify=healthy"
     ];
   };
   systemd.services."podman-dsmr" = {
@@ -62,15 +64,18 @@
     labels = {
       "backup" = "postgresql";
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
     };
     log-driver = "journald";
     extraOptions = [
+      "--sdnotify=healthy"
       "--network-alias=dsmrdb"
       "--network=reverse-proxy"
       "--healthcheck-command=/bin/sh -c 'pg_isready -U dsmrreader'"
       "--healthcheck-interval=10s"
       "--healthcheck-timeout=5s"
       "--healthcheck-retries=10"
+      "--sdnotify=healthy"
     ];
   };
   systemd.services."podman-dsmrdb" = {
@@ -103,6 +108,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
     };
     log-driver = "journald";
     extraOptions = [
@@ -140,6 +146,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.hass.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.hass.rule" = "Host(`hass.sirchia.nl`)";
@@ -147,6 +154,7 @@
     };
     log-driver = "journald";
     extraOptions = [
+      "--sdnotify=container"
       "--cap-add=CAP_NET_BIND_SERVICE"
       "--cap-add=CAP_NET_RAW"
       "--device=/dev/serial/by-id/usb-Arduino__www.arduino.cc__0042_854303437373513041B2-if00:/dev/serial/by-id/usb-Arduino__www.arduino.cc__0042_854303437373513041B2-if00"
@@ -177,7 +185,7 @@
     ];
   };
   virtualisation.oci-containers.containers."mosquitto" = {
-    image = "docker.io/eclipse-mosquitto";
+    image = "docker.io/eclipse-mosquitto:latest";
     environment = {
       TZ = "Europe/Amsterdam";
     };
@@ -192,6 +200,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
     };
     log-driver = "journald";
     extraOptions = [
@@ -229,6 +238,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.zwavejs.loadbalancer.server.port" = "8091";
     };

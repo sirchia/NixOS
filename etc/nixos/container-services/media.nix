@@ -26,6 +26,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.jellyfin.entrypoints" = "web,websecure";
       "traefik.http.routers.jellyfin.middlewares" = "geoblock-ch@file";
@@ -77,6 +78,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
@@ -115,6 +117,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
@@ -145,7 +148,7 @@
     ];
   };
   virtualisation.oci-containers.containers."lidarr" = {
-    image = "cr.hotio.dev/hotio/lidarr";
+    image = "cr.hotio.dev/hotio/lidarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -157,6 +160,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.lidarr.loadbalancer.server.port" = "8686";
     };
@@ -200,6 +204,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.listenarr.loadbalancer.server.port" = "8787";
     };
@@ -242,6 +247,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
@@ -278,7 +284,7 @@
     ];
   };
   virtualisation.oci-containers.containers."overseerr" = {
-    image = "cr.hotio.dev/hotio/overseerr";
+    image = "cr.hotio.dev/hotio/overseerr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -290,6 +296,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.overseerr.loadbalancer.server.port" = "5055";
     };
@@ -319,7 +326,7 @@
     ];
   };
   virtualisation.oci-containers.containers."plex" = {
-    image = "cr.hotio.dev/hotio/plex";
+    image = "cr.hotio.dev/hotio/plex:latest";
     environmentFiles = [
       "/etc/nixos/container-services/plex.env"
     ];
@@ -335,6 +342,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.plex.entrypoints" = "web,websecure";
       "traefik.http.routers.plex.middlewares" = "geoblock-ch@file";
@@ -373,7 +381,7 @@
     ];
   };
   virtualisation.oci-containers.containers."plextraktwatch" = {
-    image = "ghcr.io/taxel/plextraktsync";
+    image = "ghcr.io/taxel/plextraktsync:latest";
     environment = {
       TZ = "Europe/Amsterdam";
     };
@@ -382,6 +390,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
     };
     log-driver = "journald";
     extraOptions = [
@@ -421,6 +430,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.prowlarr.loadbalancer.server.port" = "9696";
     };
@@ -450,7 +460,7 @@
     ];
   };
   virtualisation.oci-containers.containers."qbittorrent" = {
-    image = "cr.hotio.dev/hotio/qbittorrent";
+    image = "cr.hotio.dev/hotio/qbittorrent:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -466,6 +476,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.qbittorrent.loadbalancer.server.port" = "8080";
     };
@@ -497,7 +508,7 @@
     ];
   };
   virtualisation.oci-containers.containers."radarr" = {
-    image = "cr.hotio.dev/hotio/radarr";
+    image = "cr.hotio.dev/hotio/radarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -509,6 +520,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.radarr.loadbalancer.server.port" = "7878";
     };
@@ -552,6 +564,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.readarr.loadbalancer.server.port" = "8787";
     };
@@ -583,7 +596,7 @@
     ];
   };
   virtualisation.oci-containers.containers."sabnzbd" = {
-    image = "cr.hotio.dev/hotio/sabnzbd";
+    image = "cr.hotio.dev/hotio/sabnzbd:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -595,6 +608,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.sabnzbd.loadbalancer.server.port" = "8080";
     };
@@ -626,7 +640,7 @@
     ];
   };
   virtualisation.oci-containers.containers."sonarr" = {
-    image = "cr.hotio.dev/hotio/sonarr";
+    image = "cr.hotio.dev/hotio/sonarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -638,6 +652,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.sonarr.loadbalancer.server.port" = "8989";
     };
@@ -669,7 +684,7 @@
     ];
   };
   virtualisation.oci-containers.containers."tautulli" = {
-    image = "cr.hotio.dev/hotio/tautulli";
+    image = "cr.hotio.dev/hotio/tautulli:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -681,6 +696,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.tautulli.loadbalancer.server.port" = "8181";
     };

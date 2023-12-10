@@ -13,6 +13,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.middlewares.spotweb-ssl.headers.customrequestheaders.X-SSL" = "on";
       "traefik.http.routers.spotweb.middlewares" = "spotweb-ssl";
@@ -46,7 +47,7 @@
     ];
   };
   virtualisation.oci-containers.containers."spotweb_db" = {
-    image = "lscr.io/linuxserver/mariadb";
+    image = "lscr.io/linuxserver/mariadb:latest";
     environmentFiles = [
       "/etc/nixos/container-services/spotweb.env"
     ];
@@ -56,6 +57,7 @@
     labels = {
       "backup" = "mysql";
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
     };
     log-driver = "journald";
     extraOptions = [
@@ -95,6 +97,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.vault.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.vault.rule" = "Host(`vault.sirchia.nl`)";
@@ -126,7 +129,7 @@
     ];
   };
   virtualisation.oci-containers.containers."wiki" = {
-    image = "lscr.io/linuxserver/dokuwiki";
+    image = "lscr.io/linuxserver/dokuwiki:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -137,6 +140,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.wiki.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.wiki.rule" = "Host(`wiki.sirchia.nl`)";

@@ -52,6 +52,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.traefik.service" = "api@internal";
     };
@@ -60,6 +61,7 @@
     ];
     log-driver = "journald";
     extraOptions = [
+      "--sdnotify=container"
       "--add-host=host.docker.internal:172.17.0.1"
       "--network-alias=traefik"
       "--network=reverse-proxy"
@@ -93,6 +95,10 @@
       "/workload/appdata/traefik/etc/acme/acme.json:/traefik/acme.json:ro"
       "/workload/appdata/traefik-certs-dumper:/output:rw"
     ];
+    labels = {
+      "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
+    };
     log-driver = "journald";
     extraOptions = [
       "--init"

@@ -4,7 +4,7 @@
 {
   # Containers
   virtualisation.oci-containers.containers."dockerproxy" = {
-    image = "docker.io/tecnativa/docker-socket-proxy";
+    image = "docker.io/tecnativa/docker-socket-proxy:latest";
     environment = {
       CONTAINERS = "1";
       IMAGES = "1";
@@ -18,9 +18,15 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
     };
     log-driver = "journald";
     extraOptions = [
+      "--healthcheck-interval=10s"
+      "--healthcheck-timeout=5s"
+      "--healthcheck-retries=10"
+      "--healthcheck-command=/bin/sh -c 'wget --no-verbose --spider --no-check-certificate http://127.0.0.1:2375/version || exit 1'"
+      "--sdnotify=healthy"
       "--network-alias=dockerproxy"
       "--network=socket-proxy"
     ];
@@ -54,6 +60,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "diun.watch_repo" = "false";
     };
     log-driver = "journald";
@@ -84,13 +91,14 @@
     ];
   };
   virtualisation.oci-containers.containers."dozzle" = {
-    image = "docker.io/amir20/dozzle";
+    image = "docker.io/amir20/dozzle:latest";
     environment = {
       DOZZLE_NO_ANALYTICS = "true";
       DOZZLE_REMOTE_HOST = "tcp://dockerproxy:2375|sirchia.nl";
     };
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
@@ -122,7 +130,7 @@
     ];
   };
   virtualisation.oci-containers.containers."hdidle" = {
-    image = "docker.io/tekgator/docker-hd-idle";
+    image = "docker.io/tekgator/docker-hd-idle:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -134,6 +142,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
     };
     log-driver = "journald";
     extraOptions = [
@@ -197,6 +206,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.middlewares.omada-headers.headers.customrequestheaders.Host" = "omada.sirchia.nl:8043";
       "traefik.http.middlewares.omada-headers.headers.customresponseheaders.Host" = "omada.sirchia.nl";
@@ -211,6 +221,11 @@
     };
     log-driver = "journald";
     extraOptions = [
+      "--healthcheck-interval=10s"
+      "--healthcheck-timeout=5s"
+      "--healthcheck-retries=10"
+      "--healthcheck-command=/bin/sh -c 'wget --no-verbose --spider --no-check-certificate https://localhost:8043 || exit 1'"
+      "--sdnotify=healthy"
       "--network-alias=omada"
       "--network=reverse-proxy"
     ];
@@ -250,11 +265,17 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.services.pihole.loadbalancer.server.port" = "80";
     };
     log-driver = "journald";
     extraOptions = [
+      "--healthcheck-interval=10s"
+      "--healthcheck-timeout=5s"
+      "--healthcheck-retries=10"
+      "--healthcheck-command=/bin/sh -c 'dig pihole.sirchia.nl @192.168.1.2 || exit 1'"
+      "--sdnotify=healthy"
       "--cap-add=CAP_NET_BIND_SERVICE"
       "--cap-add=NET_ADMIN"
       "--network-alias=pihole"
@@ -289,6 +310,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
@@ -327,7 +349,7 @@
     ];
   };
   virtualisation.oci-containers.containers."smokeping" = {
-    image = "lscr.io/linuxserver/smokeping";
+    image = "lscr.io/linuxserver/smokeping:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -339,6 +361,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
@@ -367,7 +390,7 @@
     ];
   };
   virtualisation.oci-containers.containers."syncthing" = {
-    image = "lscr.io/linuxserver/syncthing";
+    image = "lscr.io/linuxserver/syncthing:latest";
     environment = {
       PGID = "1000";
       PUID = "1000";
@@ -384,6 +407,7 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
@@ -414,7 +438,7 @@
     ];
   };
   virtualisation.oci-containers.containers."uptime" = {
-    image = "docker.io/louislam/uptime-kuma";
+    image = "docker.io/louislam/uptime-kuma:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -425,10 +449,15 @@
     ];
     labels = {
       "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
     };
     log-driver = "journald";
     extraOptions = [
+      "--healthcheck-interval=10s"
+      "--healthcheck-timeout=5s"
+      "--healthcheck-retries=10"
+      "--healthcheck-command=/bin/sh -c 'curl http://uptime.lan:3001/api/push/pussaNWAJY?status=up&msg=OK&ping= || exit 1'"
       "--network-alias=uptime"
       "--network=reverse-proxy"
       "--network=socket-proxy"
