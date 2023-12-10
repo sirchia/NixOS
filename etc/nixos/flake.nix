@@ -78,6 +78,23 @@
 					})
 				]; })
 
+        ({ config, pkgs, ... }: { nixpkgs.overlays = [
+					(final: prev: {
+						podman = prev.podman.overrideAttrs (old: {
+							version = "4.8.1";
+							src = pkgs.fetchFromGitHub {
+								owner = "containers";
+								repo = "podman";
+								#rev = "v${version}";
+								rev = "v4.8.1";
+								hash = "sha256-EDIgipbv8Z7nVV6VQ5IAmvHvvpLyGEDHMDnwhMUm/BQ=";
+							};
+              patches = [];
+						});
+					})
+				]; })
+
+
         ./hosts/server
         ./configuration.nix
         disko.nixosModules.disko
