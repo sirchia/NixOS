@@ -392,6 +392,9 @@
       "diun.enable" = "true";
       "io.containers.autoupdate" = "registry";
     };
+    cmd = [
+      "watch"
+    ];
     log-driver = "journald";
     extraOptions = [
       "--init"
