@@ -37,30 +37,15 @@
     services.podman-prune.unitConfig.OnFailure = "notify-service-failure@%i.service";
     services.podman-prune.unitConfig.OnSuccess = "notify-service-success@%i.service";
 
-    services."podman-auto-update" = {
-      enable = true;
-      description = "Automatic update of all podman containers";
+    services.podman-auto-update = {
+      serviceConfig.ExecStartPre = "/persist/scripts/pcmanage.sh preUpdate";
+
       path = [ pkgs.podman ];
       unitConfig = {
         OnFailure = "notify-service-failure@%i.service";
         OnSuccess = "notify-service-success@%i.service";
       };
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "/persist/scripts/pcmanage.sh update";
-      };
     };
-
-    timers."podman-auto-update" = {
-      description = "Daily automatic update of all podman containers";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "02:12";
-        Persistent = true;
-        Unit = "podman-auto-update.service";
-      };
-    };
-
   };
 
   # Root service

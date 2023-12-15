@@ -17,7 +17,7 @@ function backupVersions {
     done
 }
 
-function update {
+function preUpdate {
     if systemctl list-units | grep "podman.*service" | grep -v -E "podman-network|podman-auto-update|running"; then
       echo "The service(s) listed above were not in a healthy state, canceling update"
       exit 1
@@ -30,6 +30,10 @@ function update {
     # for i in $(podman auto-update --dry-run --format "{{.Image}} {{.Updated}}" | grep pending | cut -d " " -f1); do
     #    echo "Updating $i"
     # done
+}
+
+function update {
+    preUpdate
     
     podman auto-update --format "{{.Image}} {{.Updated}}" | grep true
     exit 0
@@ -66,7 +70,7 @@ function resume {
 if declare -f "$1" > /dev/null; then
   "$@"
 else
-  echo "The only valid arguments are backupVersions update, restore X, and resume X"
+  echo "The only valid arguments are backupVersions, preUpdate, update, restore X, and resume X"
 
   exit 1
 fi
