@@ -475,6 +475,10 @@
       "podman-network-macvlan_lan.service"
       "podman-dockerproxy.service"
     ];
+    before = [
+      "notify-service-failure@.service"
+      "notify-service-success@.service"
+    ];
     requires = [
       "zfs.target"
       "podman-network-socket-proxy.service"
@@ -487,6 +491,8 @@
     ];
     wantedBy = [
       "podman-compose-infra-root.target"
+      "notify-service-failure@.service"
+      "notify-service-success@.service"
     ];
   };
 

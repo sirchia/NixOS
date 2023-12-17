@@ -18,10 +18,18 @@ function backupVersions {
 }
 
 function preUpdate {
-    if systemctl list-units | grep "podman.*service" | grep -v -E "podman-network|podman-auto-update|running"; then
-      echo "The service(s) listed above were not in a healthy state, canceling update"
-      exit 1
-    fi
+    for i in {1..11}; do
+      if systemctl list-units | grep "podman.*service" | grep -v -E "podman-network|podman-auto-update|running"; then
+        if [ $i == 11 ]; then
+          echo "The service(s) listed above were not in a healthy state, cancelling update"
+          exit 1
+        fi
+        echo "The service(s) listed above were not in a healthy state, awaiting ready state $i/10"
+        sleep 20
+      else
+        break
+      fi
+    done
 
     echo "Backing up version hashes"
     backupVersions
