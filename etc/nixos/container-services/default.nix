@@ -1,6 +1,6 @@
 # configuration.nix
 
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, pkgs-unstable, lib, inputs, ... }:
 
 {
   imports =
@@ -15,6 +15,7 @@
 
   # System Packages
   environment.systemPackages = with pkgs; [
+    pkgs-unstable.podman
     podman-compose
     docker-compose
   ];
