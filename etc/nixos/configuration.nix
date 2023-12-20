@@ -42,6 +42,7 @@
     "disk2pool"
     "disk3pool"
     "disk4pool"
+    "nvmebackuppool"
     "paritypool"
   ];
 
@@ -334,14 +335,61 @@
     };
   };
 
+  services.syncoid = {
+    enable = true;
+    interval = "daily";
+
+    commands."local-backup" = {
+      source = "rootpool";
+      target = "nvmebackuppool";
+      extraArgs = [
+        "--recursive"
+        "--skip-parent"
+        "--delete-target-snapshots"
+        "--preserve-properties"
+        "--use-hold"
+      ];
+      localSourceAllow = [
+        "bookmark"
+        "destroy"
+        "hold"
+        "mount"
+        "release"
+        "send"
+        "snapshot"
+      ];
+      localTargetAllow = [
+        "canmount"
+        "change-key"
+        "compression"
+        "create"
+        "destroy"
+        "hold"
+        "mount"
+        "mountpoint"
+        "receive"
+        "release"
+        "rollback"
+      ];
+      recvOptions = "u";  # don't auto-mount any new data sets
+      sendOptions = "w";  # raw send
+      service = { 
+        unitConfig = {
+          OnFailure = "notify-service-failure@%i.service";
+          OnSuccess = "notify-service-success@%i.service";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+        };
+      };
+    };
+  };
+
   system.autoUpgrade = {
     enable = true;
     flake = "/etc/nixos";
     flags = [
-      #"--update-input"
-      #"nixpkgs"
       "-L" # print build logs
-      #"--commit-lock-file"
     ];
     dates = "Sat 02:00";
     randomizedDelaySec = "45min";
@@ -396,20 +444,8 @@
       };
     };
 
-    "syncoid-local-backup" = {
-      enable = true;
-      description = "Local backup of main disk";
-      unitConfig = {
-        OnFailure = "notify-service-failure@%i.service";
-        OnSuccess = "notify-service-success@%i.service";
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        Environment = "HOME=%h";
-        ExecStartPre = "/bin/sh -c 'if ! /run/current-system/sw/bin/zpool list nvmebackuppool &> /dev/null; then /run/current-system/sw/bin/zpool import nvmebackuppool -R /mnt/nvmebackup; fi'";
-        ExecStart = "/run/current-system/sw/bin/syncoid rootpool nvmebackuppool --recursive --skip-parent --delete-target-snapshots --force-delete --preserve-properties";
-      };
-    };
+
+    zfs-import-nvmebackuppool.serviceConfig.Environment = "\"ZFS_FORCE=-R /mnt/nvmebackuppool\"";
 
     sanoid.unitConfig.OnFailure = "notify-service-failure@%i.service";
     sanoid.unitConfig.OnSuccess = "notify-service-success@%i.service";
@@ -447,15 +483,6 @@
         OnCalendar = "*:02";
         Persistent = true;
         Unit = "sanoid-snapshot-health.service";
-      };
-    };
-    "syncoid-local-backup" = {
-      description = "Daily local backup of main disk";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "daily";
-        Persistent = true;
-        Unit = "syncoid-local-backup.service";
       };
     };
   };
