@@ -17,7 +17,6 @@
   environment.systemPackages = with pkgs; [
     pkgs-unstable.podman
     podman-compose
-    docker-compose
   ];
 
   boot.kernel.sysctl = {
