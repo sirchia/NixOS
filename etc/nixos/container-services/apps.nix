@@ -152,7 +152,40 @@
       "--network=reverse-proxy"
     ];
   };
-  systemd.services."podman-wiki" = {
+  virtualisation.oci-containers.containers."ladder" = {
+    image = "ghcr.io/everywall/ladder:latest";
+    environment = {
+      PORT = "8080";
+      RULESET = "/app/ruleset.yaml";
+      # ALLOWED_DOMAINS=example.com,example.org;
+      # ALLOWED_DOMAINS_RULESET=false;
+      # EXPOSE_RULESET=true;
+      # PREFORK=false;
+      # DISABLE_FORM=false;
+      # FORM_PATH=/app/form.html;
+      # X_FORWARDED_FOR=66.249.66.1;
+      # USER_AGENT=Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html);
+      # USERPASS=foo:bar;
+      # LOG_URLS=true;
+      # GODEBUG=netdns=go;
+    };
+    volumes = [
+      "/workload/appdata/ladder/ladder-rules/ruleset.yaml:/app/ruleset.yaml:rw"
+      #"/workload/appdata/ladder/handlers/form.html:/app/form.html:rw"
+    ];
+    labels = {
+      "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
+      "traefik.enable" = "true";
+      "traefik.http.services.ladder.loadbalancer.server.port" = "8080";
+    };
+    log-driver = "journald";
+    extraOptions = [
+      "--network-alias=ladder"
+      "--network=reverse-proxy"
+    ];
+  };
+  systemd.services."podman-ladder" = {
     serviceConfig = {
       Restart = lib.mkOverride 500 "always";
     };
