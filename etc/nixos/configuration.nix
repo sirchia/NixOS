@@ -300,7 +300,10 @@
       };
       "rootpool/local/root".useTemplate = [ "temporary" ];
       "rootpool/persist".useTemplate = [ "backup" ];
-      "rootpool/workload".useTemplate = [ "temporary" ];
+      "rootpool/workload" = {
+        useTemplate = [ "temporary" ];
+        recursive = true;
+      };
     };
 
     
