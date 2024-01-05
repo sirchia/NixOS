@@ -50,46 +50,46 @@
       "podman-compose-infra-root.target"
     ];
   };
-  virtualisation.oci-containers.containers."diun" = {
-    image = "docker.io/crazymax/diun:latest";
-    environmentFiles = [
-      "/etc/nixos/container-services/diun.env"
-    ];
-    volumes = [
-      "/workload/appdata/diun:/data:rw"
-    ];
-    labels = {
-      "diun.enable" = "true";
-      "io.containers.autoupdate" = "registry";
-      "diun.watch_repo" = "false";
-    };
-    log-driver = "journald";
-    extraOptions = [
-      "--network-alias=diun"
-      "--network=socket-proxy"
-    ];
-  };
-  systemd.services."podman-diun" = {
-    serviceConfig = {
-      Restart = lib.mkOverride 500 "always";
-    };
-    after = [
-      "zfs.target"
-      "podman-network-socket-proxy.service"
-      "podman-dockerproxy.service"
-    ];
-    requires = [
-      "zfs.target"
-      "podman-network-socket-proxy.service"
-      "podman-dockerproxy.service"
-    ];
-    partOf = [
-      "podman-compose-infra-root.target"
-    ];
-    wantedBy = [
-      "podman-compose-infra-root.target"
-    ];
-  };
+#  virtualisation.oci-containers.containers."diun" = {
+#    image = "docker.io/crazymax/diun:latest";
+#    environmentFiles = [
+#      "/etc/nixos/container-services/diun.env"
+#    ];
+#    volumes = [
+#      "/workload/appdata/diun:/data:rw"
+#    ];
+#    labels = {
+#      "diun.enable" = "true";
+#      "io.containers.autoupdate" = "registry";
+#      "diun.watch_repo" = "false";
+#    };
+#    log-driver = "journald";
+#    extraOptions = [
+#      "--network-alias=diun"
+#      "--network=socket-proxy"
+#    ];
+#  };
+#  systemd.services."podman-diun" = {
+#    serviceConfig = {
+#      Restart = lib.mkOverride 500 "always";
+#    };
+#    after = [
+#      "zfs.target"
+#      "podman-network-socket-proxy.service"
+#      "podman-dockerproxy.service"
+#    ];
+#    requires = [
+#      "zfs.target"
+#      "podman-network-socket-proxy.service"
+#      "podman-dockerproxy.service"
+#    ];
+#    partOf = [
+#      "podman-compose-infra-root.target"
+#    ];
+#    wantedBy = [
+#      "podman-compose-infra-root.target"
+#    ];
+#  };
   virtualisation.oci-containers.containers."dozzle" = {
     image = "docker.io/amir20/dozzle:latest";
     environment = {
