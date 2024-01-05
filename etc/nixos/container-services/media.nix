@@ -148,7 +148,7 @@
     ];
   };
   virtualisation.oci-containers.containers."lidarr" = {
-    image = "cr.hotio.dev/hotio/lidarr:latest";
+    image = "ghcr.io/hotio/lidarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -192,7 +192,7 @@
     ];
   };
   virtualisation.oci-containers.containers."listenarr" = {
-    image = "cr.hotio.dev/hotio/readarr:latest";
+    image = "ghcr.io/hotio/readarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -284,7 +284,7 @@
     ];
   };
   virtualisation.oci-containers.containers."overseerr" = {
-    image = "cr.hotio.dev/hotio/overseerr:latest";
+    image = "ghcr.io/hotio/overseerr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -326,7 +326,7 @@
     ];
   };
   virtualisation.oci-containers.containers."plex" = {
-    image = "cr.hotio.dev/hotio/plex:latest";
+    image = "ghcr.io/hotio/plex:latest";
     environmentFiles = [
       "/etc/nixos/container-services/plex.env"
     ];
@@ -422,7 +422,7 @@
     ];
   };
   virtualisation.oci-containers.containers."prowlarr" = {
-    image = "cr.hotio.dev/hotio/prowlarr:testing";
+    image = "ghcr.io/hotio/prowlarr:testing";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -463,7 +463,7 @@
     ];
   };
   virtualisation.oci-containers.containers."qbittorrent" = {
-    image = "cr.hotio.dev/hotio/qbittorrent:latest";
+    image = "ghcr.io/hotio/qbittorrent:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -511,7 +511,7 @@
     ];
   };
   virtualisation.oci-containers.containers."radarr" = {
-    image = "cr.hotio.dev/hotio/radarr:latest";
+    image = "ghcr.io/hotio/radarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -555,7 +555,7 @@
     ];
   };
   virtualisation.oci-containers.containers."readarr" = {
-    image = "cr.hotio.dev/hotio/readarr:latest";
+    image = "ghcr.io/hotio/readarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -599,7 +599,7 @@
     ];
   };
   virtualisation.oci-containers.containers."sabnzbd" = {
-    image = "cr.hotio.dev/hotio/sabnzbd:latest";
+    image = "ghcr.io/hotio/sabnzbd:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -643,7 +643,7 @@
     ];
   };
   virtualisation.oci-containers.containers."sonarr" = {
-    image = "cr.hotio.dev/hotio/sonarr:latest";
+    image = "ghcr.io/hotio/sonarr:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
@@ -687,7 +687,7 @@
     ];
   };
   virtualisation.oci-containers.containers."tautulli" = {
-    image = "cr.hotio.dev/hotio/tautulli:latest";
+    image = "ghcr.io/hotio/tautulli:latest";
     environment = {
       PGID = "1003";
       PUID = "1003";
