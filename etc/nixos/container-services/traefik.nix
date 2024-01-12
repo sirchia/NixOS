@@ -101,7 +101,6 @@
     };
     log-driver = "journald";
     extraOptions = [
-      "--init"
       "--network-alias=traefik-certs-dumper"
       "--network=reverse-proxy"
       "--healthcheck-command=pgrep dump"
