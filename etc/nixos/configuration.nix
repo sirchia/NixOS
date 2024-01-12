@@ -350,7 +350,6 @@
         "--skip-parent"
         "--delete-target-snapshots"
         "--preserve-properties"
-        "--use-hold"
       ];
       localSourceAllow = [
         "bookmark"
