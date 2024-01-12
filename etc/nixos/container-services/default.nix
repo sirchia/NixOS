@@ -51,6 +51,9 @@
         OnSuccess = "notify-service-success@%i.service";
       };
     };
+
+    # Needed to activate podman-auto-update timer provided by podman upstream
+    timers.podman-auto-update.wantedBy = [ "timers.target" ];
   };
 
   # Root service
