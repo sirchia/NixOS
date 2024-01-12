@@ -68,7 +68,6 @@
     };
     log-driver = "journald";
     extraOptions = [
-      "--sdnotify=healthy"
       "--network-alias=dsmrdb"
       "--network=reverse-proxy"
       "--healthcheck-command=/bin/sh -c 'pg_isready -U dsmrreader'"
@@ -252,6 +251,7 @@
       "--healthcheck-timeout=10s"
       "--healthcheck-start-period=30s"
       "--healthcheck-retries=3"
+      "--sdnotify=healthy"
     ];
   };
   systemd.services."podman-zwavejs" = {
