@@ -100,7 +100,9 @@
   ################
 
   # https://nixos.wiki/wiki/Storage_optimization
-  nix.settings.auto-optimise-store = true;
+  #don't optimize on every build, instead schedule automatic optimize
+  #nix.settings.auto-optimise-store = true;
+  nix.optimise.automatic = true;
   # Garbage Collection 
   nix.gc = {
     automatic = true;
