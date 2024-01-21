@@ -158,8 +158,8 @@
       "--cap-add=CAP_NET_RAW"
       "--device=/dev/serial/by-id/usb-Arduino__www.arduino.cc__0042_854303437373513041B2-if00:/dev/serial/by-id/usb-Arduino__www.arduino.cc__0042_854303437373513041B2-if00"
       "--network-alias=hass"
-      "--network=macvlan_lan:ip=192.168.1.229"
-      "--network=reverse-proxy"
+      "--network=macvlan_lan:ip=192.168.1.229,interface_name=eth0"
+      "--network=reverse-proxy:interface_name=eth1"
     ];
   };
   systemd.services."podman-hass" = {
