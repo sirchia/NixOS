@@ -173,6 +173,8 @@
     # allowPointToPoint = true;
     reflector = true;
   };
+
+  services.locate.enable = true;
  
   ### SSH ###
   services.openssh = {
