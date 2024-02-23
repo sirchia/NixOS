@@ -164,6 +164,7 @@
   # Services #
   ############
   services.zfs.autoScrub.enable = true;
+  services.zfs.autoScrub.interval = "monthly";
   
   services.smartd.enable = true;
   services.avahi = {
