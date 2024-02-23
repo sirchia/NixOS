@@ -686,6 +686,51 @@
       "podman-compose-media-root.target"
     ];
   };
+  virtualisation.oci-containers.containers."makemkv" = {
+    image = "docker.io/jlesage/makemkv:latest";
+    environment = {
+      GROUP_ID = "1003";
+      USER_ID = "1003";
+      TZ = "Europe/Amsterdam";
+    };
+    volumes = [
+      "/mnt/storage:/storage:ro"
+      "/mnt/storage/Downloads/MakeMKV:/output:rw"
+      "/workload/appdata/makemkv:/config:rw"
+    ];
+    labels = {
+      "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
+      "traefik.enable" = "true";
+      "traefik.http.services.makemkv.loadbalancer.server.port" = "5800";
+    };
+    log-driver = "journald";
+    extraOptions = [
+      "--network-alias=makemkv"
+      "--network=reverse-proxy"
+    ];
+  };
+  systemd.services."podman-makemkv" = {
+    serviceConfig = {
+      Restart = lib.mkOverride 500 "always";
+    };
+    after = [
+      "podman-network-reverse-proxy.service"
+      "mnt-storage.mount"
+      "zfs.target"
+    ];
+    requires = [
+      "podman-network-reverse-proxy.service"
+      "mnt-storage.mount"
+      "zfs.target"
+    ];
+    partOf = [
+    #  "podman-compose-media-root.target"
+    ];
+    wantedBy = [
+    #  "podman-compose-media-root.target"
+    ];
+  };
   virtualisation.oci-containers.containers."tautulli" = {
     image = "ghcr.io/hotio/tautulli:latest";
     environment = {
