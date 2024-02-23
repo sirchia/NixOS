@@ -423,12 +423,10 @@
     after = [
       "zfs.target"
       "podman-network-reverse-proxy.service"
-      "mnt-disk4.mount"
     ];
     requires = [
       "zfs.target"
       "podman-network-reverse-proxy.service"
-      "mnt-disk4.mount"
     ];
     partOf = [
       "podman-compose-infra-root.target"
