@@ -41,7 +41,7 @@
       serviceConfig = {
         ExecStartPre = "/persist/scripts/pcmanage.sh preUpdate";
         ExecStartPost = pkgs.writeShellScript "reportUpdates" ''
-          ${pkgs.apprise}/bin/apprise -t "Podman update report" -b "$(journalctl -u podman-auto-update.service --since 0:00 -o cat | grep "registry.*true" | ${pkgs.gawk}/bin/awk -F'[()]' '{print $2}')"
+          ${pkgs.apprise}/bin/apprise -t "Podman update report" -b "$(journalctl -u podman-auto-update.service --since 0:00 -o cat | grep "registry.*true" | ${pkgs.gawk}/bin/awk -F'[()]' '{print $2}')."
 '';
       };
 
