@@ -28,12 +28,21 @@
     extra-experimental-features = flakes
   '';
 
+  boot.consoleLogLevel = 8;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.generationsDir.copyKernels = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.timeout = 3;
+  boot.kernelModules = [ 
+    "r8169"
+    "igc"
+    "netconsole"
+  ];
+  boot.extraModprobeConfig = "options netconsole netconsole=@192.168.1.2/eth1,6666@192.168.1.7/";
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-  boot.kernelParams = [ "elevator=none" ];
+  boot.kernelParams = [ 
+    "panic=5"
+  ];
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.devNodes ="/dev/disk/by-label";
   boot.zfs.extraPools =[ 
