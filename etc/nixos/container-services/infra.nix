@@ -154,8 +154,6 @@
       "--device=/dev/sdd:/dev/sdd"
       "--device=/dev/sde:/dev/sde"
       "--device=/dev/sdf:/dev/sdf"
-      "--device=/dev/sdg:/dev/sdg"
-      "--device=/dev/sdh:/dev/sdh"
       "--network-alias=hdidle"
       "--network=reverse-proxy"
     ];
