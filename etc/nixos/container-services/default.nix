@@ -11,6 +11,7 @@
       ./hass.nix
       ./media.nix
       ./apps.nix
+      ./manual.nix
     ];
 
   # System Packages
