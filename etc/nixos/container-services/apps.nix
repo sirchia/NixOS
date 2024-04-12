@@ -157,6 +157,8 @@
     environment = {
       PORT = "8080";
       RULESET = "/app/ruleset.yaml";
+      LOG_URLS = "false";
+      NOLOGS = "true";
       # ALLOWED_DOMAINS=example.com,example.org;
       # ALLOWED_DOMAINS_RULESET=false;
       # EXPOSE_RULESET=true;
@@ -166,7 +168,6 @@
       # X_FORWARDED_FOR=66.249.66.1;
       # USER_AGENT=Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html);
       # USERPASS=foo:bar;
-      # LOG_URLS=true;
       # GODEBUG=netdns=go;
     };
     volumes = [
@@ -186,6 +187,46 @@
     ];
   };
   systemd.services."podman-ladder" = {
+    serviceConfig = {
+      Restart = lib.mkOverride 500 "always";
+    };
+    after = [
+      "zfs.target"
+      "podman-network-reverse-proxy.service"
+    ];
+    requires = [
+      "zfs.target"
+      "podman-network-reverse-proxy.service"
+    ];
+    partOf = [
+      "podman-compose-apps-root.target"
+    ];
+    wantedBy = [
+      "podman-compose-apps-root.target"
+    ];
+  };
+
+  virtualisation.oci-containers.containers."pdf" = {
+    image = "docker.io/frooodle/s-pdf:latest";
+    volumes = [
+      "/workload/appdata/pdf/trainingData:/usr/share/tesseract-ocr/5/tessdata:rw"
+      "/workload/appdata/pdf/extraConfigs:/configs:rw"
+      "/workload/appdata/pdf/customFiles:/customFiles:rw"
+      "/workload/appdata/pdf/logs:/logs:rw"
+    ];
+    labels = {
+      "diun.enable" = "true";
+      "io.containers.autoupdate" = "registry";
+      "traefik.enable" = "true";
+      "traefik.http.services.pdf.loadbalancer.server.port" = "8080";
+    };
+    log-driver = "journald";
+    extraOptions = [
+      "--network-alias=pdf"
+      "--network=reverse-proxy"
+    ];
+  };
+  systemd.services."podman-pdf" = {
     serviceConfig = {
       Restart = lib.mkOverride 500 "always";
     };
