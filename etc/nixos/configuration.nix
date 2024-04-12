@@ -56,7 +56,6 @@
     "paritypool"
   ];
 
-
   ####################
   ##  Localization  ##
   ####################
@@ -171,6 +170,7 @@
   nix.gc = {
     automatic = true;
     dates = "daily";
+    randomizedDelaySec = "45min";
     options = "--delete-older-than 14d";
   };
 
@@ -307,6 +307,7 @@
     parityFiles = [
       "/mnt/parity/snapraid-parity"
     ];
+    sync.interval = "*-*-* 01:15:00";
   };
 
   fileSystems."/mnt/bootbackup" = { 
@@ -317,6 +318,7 @@
   fileSystems."/mnt/storage" = {
     device = "/mnt/disk1:/mnt/disk2:/mnt/disk3:/mnt/disk4";
     fsType = "fuse.mergerfs";
+    noCheck = true;
     options = [ 
       "defaults"
       "nonempty"
@@ -428,7 +430,7 @@
       temporary = {
         frequently = 0;
         hourly = 24;
-        daily = 7;
+        daily = 30;
         monthly = 0;
         yearly = 0;
         autosnap = true;
@@ -448,7 +450,7 @@
 
   services.syncoid = {
     enable = true;
-    interval = "daily";
+    interval = "*-*-* 03:10:00";
 
     commands."local-backup" = {
       source = "rootpool";
