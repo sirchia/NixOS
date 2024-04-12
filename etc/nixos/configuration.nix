@@ -7,6 +7,7 @@
     [
       ./hardware-configuration.nix
       ./impermanence.nix
+      ./virtualization.nix
       ./users.nix
       ./myparams.nix
       (import ./disko-config.nix {
@@ -221,6 +222,7 @@
     sanoid
     smartmontools
     snapraid
+    quickemu
   ];
 
   ############
