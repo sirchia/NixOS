@@ -28,7 +28,7 @@
     extra-experimental-features = flakes
   '';
 
-  boot.consoleLogLevel = 8;
+  boot.consoleLogLevel = 7;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.generationsDir.copyKernels = true;
   boot.loader.systemd-boot.enable = true;
@@ -69,10 +69,10 @@
     hostName = config.myParams.myhostname;
     hostId = config.myParams.myhostid;
 
-    vlans.vlan40 = {
-      id = 40;
-      interface = "enp2s0";
-    };
+    # Disable dhcpcd as we use systemd-networkd
+    dhcpcd.enable = false;
+    useDHCP = false;
+    useNetworkd = true;
 
     # Open ports in firewall.
     firewall = {
@@ -81,15 +81,69 @@
       allowedTCPPorts = [ 22 53 80 443 ];
       allowedUDPPorts = [ 53 ];
     };
-
-    # bridge access to macvlan containers on localhost
-    macvlans.br-macvlan = {
-      interface = "enp2s0";
-      mode = "bridge";
-    };
-    interfaces.br-macvlan.ipv4.addresses = [ { address = "192.168.1.225"; prefixLength = 27; } ];
   };
 
+  systemd.network = {
+    enable = true;
+
+    netdevs = {
+      "20-vlan40" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "vlan40";
+        };
+        vlanConfig.Id = 40;
+      };
+      # bridge access to macvlan containers on localhost
+      "20-br-macvlan" = {
+         netdevConfig = {
+           Kind = "macvlan";
+           Name = "br-macvlan";
+         };
+         macvlanConfig.Mode = "bridge";
+      };
+    };
+
+    networks = {
+      "40-enp2s0" = {
+        matchConfig.Name = "enp2s0";
+        networkConfig = {
+          DHCP = "ipv4";
+          IPv6AcceptRA = true;
+
+          # LinkLocalAddressing = "no";
+        };
+
+        vlan = [
+          "vlan40"
+        ];
+
+        macvlan = [
+          "br-macvlan"
+        ];
+
+        linkConfig.RequiredForOnline = "routable";
+      };
+
+      "40-vlan40" = {
+        matchConfig.Name = "vlan40";
+        networkConfig = {
+          DHCP = "ipv4";
+        };
+        linkConfig.RequiredForOnline = "no";
+      };
+
+      "40-br-macvlan" = {
+        matchConfig.Name = "br-macvlan";
+
+        address = [
+          "192.168.1.225/27"
+        ];
+        linkConfig.RequiredForOnline = "no";
+      };
+    };
+    wait-online.anyInterface = true;
+  };
 
   ################
   ### Security ###
@@ -178,13 +232,41 @@
   services.smartd.enable = true;
   services.avahi = {
     enable = true;
-    allowInterfaces = [ "enp2s0" "vlan40@enp2s0" ];
-    # allowPointToPoint = true;
+    allowInterfaces = [ "enp2s0" "vlan40" ];
+    nssmdns = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      userServices = true;
+    };
     reflector = true;
+    extraServiceFiles = {
+      smb = ''
+        <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+        <service-group>
+          <name replace-wildcards="yes">%h</name>
+          <service>
+            <type>_smb._tcp</type>
+            <port>445</port>
+          </service>
+        </service-group>
+      '';
+    };
   };
 
   services.locate.enable = true;
  
+  services.resolved = {
+    domains = [
+      "lan"
+    ];
+    extraConfig = ''
+      MulticastDNS=false
+    '';
+    llmnr = "false";
+  };
+
   ### SSH ###
   services.openssh = {
     enable = true;
@@ -247,11 +329,16 @@
     ];
   };
 
-  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
-  services.samba-wsdd.interface = "enp2s0"; # make shares visible for windows 10 clients
+  services.samba-wsdd = {
+    enable = true; # make shares visible for windows 10 clients
+    interface = "enp2s0"; # make shares visible for windows 10 clients
+    openFirewall = true;
+  };
+
   services.samba = {
     enable = true;
     enableNmbd = false;
+    enableWinbindd = false;
     openFirewall = true;
     securityType = "user";
     extraConfig = ''
@@ -259,18 +346,24 @@
       server string = NixOS
       netbios name = NixOS
       security = user
-      guest ok = yes
+      guest ok = no
       guest account = nobody
       map to guest = bad user
       load printers = no
       passdb backend = tdbsam:/persist/etc/samba/passdb.tdb
+      fruit:aapl = yes
+      fruit:advertise_fullsync = true
+      fruit:metadata = stream
+      fruit:model = MacPro7,1
+      vfs objects = catia fruit streams_xattr acl_xattr
+      min protocol = SMB2
+      use sendfile = yes
     '';
     shares = {
       storage = {
         path = "/mnt/storage";
         browseable = "yes";
         "read only" = "no";
-        "guest ok" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
         #"force user" = "timemachine";
@@ -285,14 +378,13 @@
 
         writable = "yes";
         "read only" = "no";
-        "guest ok" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
         "force user" = "timemachine";
         "force group" = "timemachine";
-        "fruit:aapl" = "yes";
         "fruit:time machine" = "yes";
-        "vfs objects" = "catia fruit streams_xattr";
+        "aio read size" = "1";
+        "aio write size" = "1";
       };
     };
   };
