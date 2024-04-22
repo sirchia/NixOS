@@ -578,6 +578,7 @@
 
   # Prevent mount failure from falling back to emergency console
   systemd.targets.local-fs.unitConfig.OnFailure = "";
+  systemd.ctrlAltDelUnit = "";
     
   systemd.timers = {
     "boot-backup" = {
