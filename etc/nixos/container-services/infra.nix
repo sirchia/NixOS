@@ -395,7 +395,7 @@
       TZ = "Europe/Amsterdam";
     };
     volumes = [
-      "/mnt/disk3/Sync:/data1:rw"
+      "/mnt/disk4/Sync:/data1:rw"
       "/workload/appdata/syncthing:/config:rw"
     ];
     ports = [

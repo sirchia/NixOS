@@ -147,7 +147,6 @@
       "diun.enable" = "true";
       "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
-      "traefik.http.routers.hass.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.hass.rule" = "Host(`hass.sirchia.nl`)";
       "traefik.http.services.hass.loadbalancer.server.port" = "8123";
     };

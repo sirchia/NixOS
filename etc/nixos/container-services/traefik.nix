@@ -4,7 +4,7 @@
 {
   # Containers
   virtualisation.oci-containers.containers."traefik" = {
-    image = "docker.io/traefik:latest";
+    image = "docker.io/library/traefik:latest";
     cmd = [
       "--accesslog=false"
       "--accesslog.filepath=/var/log/traefik/access.log"
@@ -16,13 +16,13 @@
       "--providers.docker.exposedbydefault=false"
       "--providers.docker.endpoint=tcp://dockerproxy:2375"
       "--providers.docker.network=reverse-proxy"
-      "--providers.docker.defaultRule=Host(`{{ normalize .Name }}.sirchia.nl`) && ClientIP(`192.168.1.0/24`,`127.0.0.1`,`172.16.0.0/12`,`10.0.0.0/8`, `100.64.0.0/10`)"
-      #"--providers.docker.defaultRule=Host(`{{ index .Labels \"com.docker.compose.service\" }}.sirchia.nl`) && ClientIP(`192.168.1.0/24`,`127.0.0.1`,`172.16.0.0/12`,`10.0.0.0/8`, `100.64.0.0/10`)"
+      "--providers.docker.defaultRule=Host(`{{ normalize .Name }}.sirchia.nl`) && (ClientIP(`192.168.1.0/24`) || ClientIP(`127.0.0.1`) || ClientIP(`172.16.0.0/12`) || ClientIP(`10.0.0.0/8`) || ClientIP(`100.64.0.0/10`))"
       "--providers.file.directory=/etc/traefik/config.d"
       "--entrypoints.web.address=:80"
       "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       "--entrypoints.websecure.address=:443"
+      "--entrypoints.websecure.http.middlewares=geoblock"
       "--entrypoints.websocket.address=:3688"
       "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
       "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
@@ -35,7 +35,7 @@
       "--entrypoints.websecure.http.tls.domains[0].main=sirchia.nl"
       "--entrypoints.websecure.http.tls.domains[0].sans=*.sirchia.nl"
       "--experimental.plugins.geoblock.modulename=github.com/PascalMinder/geoblock"
-      "--experimental.plugins.geoblock.version=v0.2.5"
+      "--experimental.plugins.geoblock.version=v0.2.8"
     ];
     environmentFiles = [
       "/etc/nixos/container-services/traefik.env"
@@ -55,6 +55,17 @@
       "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.traefik.service" = "api@internal";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.allowLocalRequests" = "true";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.logLocalRequests" = "false";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.logAllowedRequests" = "false";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.logApiRequests" = "false";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.api" = "https://get.geojs.io/v1/ip/country/{ip}";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.apiTimeoutMs" = "750";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.cacheSize" = "15";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.forceMonthlyUpdate" = "true";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.allowUnknownCountries" = "false";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.unknownCountryApiResponse" = "nil";
+      "traefik.http.middlewares.geoblock.plugin.geoblock.countries" = "NL";
     };
     dependsOn = [
       "dockerproxy"

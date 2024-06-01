@@ -99,7 +99,6 @@
       "diun.enable" = "true";
       "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
-      "traefik.http.routers.vault.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.vault.rule" = "Host(`vault.sirchia.nl`)";
       "traefik.http.services.vault.loadbalancer.server.port" = "80";
     };
@@ -142,7 +141,6 @@
       "diun.enable" = "true";
       "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
-      "traefik.http.routers.wiki.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.wiki.rule" = "Host(`wiki.sirchia.nl`)";
       "traefik.http.services.wiki.loadbalancer.server.port" = "80";
     };

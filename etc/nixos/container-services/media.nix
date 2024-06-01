@@ -29,7 +29,6 @@
       "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.jellyfin.entrypoints" = "web,websecure";
-      "traefik.http.routers.jellyfin.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.jellyfin.rule" = "Host(`jellyfin.sirchia.nl`)";
       "traefik.http.services.jellyfin.loadbalancer.server.port" = "8096";
     };
@@ -345,7 +344,6 @@
       "io.containers.autoupdate" = "registry";
       "traefik.enable" = "true";
       "traefik.http.routers.plex.entrypoints" = "web,websecure";
-      "traefik.http.routers.plex.middlewares" = "geoblock-ch@file";
       "traefik.http.routers.plex.rule" = "Host(`plex.sirchia.nl`)";
       "traefik.http.services.plex.loadbalancer.server.port" = "32400";
     };
