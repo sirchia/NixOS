@@ -223,6 +223,8 @@
     smartmontools
     snapraid
     quickemu
+    unzip
+    p7zip
   ];
 
   ############
