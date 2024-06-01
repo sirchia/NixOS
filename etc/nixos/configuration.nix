@@ -364,6 +364,7 @@
       vfs objects = catia fruit streams_xattr acl_xattr
       min protocol = SMB2
       use sendfile = yes
+      allow insecure wide links = yes
     '';
     shares = {
       storage = {
@@ -372,6 +373,8 @@
         "read only" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
+        "follow symlinks" = "yes";
+        "wide links" = "yes";
         #"force user" = "timemachine";
         #"force group" = "timemachine";
       };
