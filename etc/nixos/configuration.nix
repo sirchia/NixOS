@@ -413,6 +413,7 @@
         recursive = true;
         process_children_only = true;
       };
+      "rootpool/home/sirchia/quickemu".useTemplate = [ "temporary" ];
       "rootpool/local/root".useTemplate = [ "temporary" ];
       "rootpool/persist".useTemplate = [ "backup" ];
       "rootpool/workload" = {
@@ -435,7 +436,7 @@
       temporary = {
         frequently = 0;
         hourly = 24;
-        daily = 30;
+        daily = 7;
         monthly = 0;
         yearly = 0;
         autosnap = true;
@@ -463,6 +464,50 @@
       extraArgs = [
         "--recursive"
         "--skip-parent"
+        "--delete-target-snapshots"
+        "--preserve-properties"
+        "--exclude=home/sirchia/quickemu"
+      ];
+      localSourceAllow = [
+        "bookmark"
+        "destroy"
+        "hold"
+        "mount"
+        "release"
+        "send"
+        "snapshot"
+      ];
+      localTargetAllow = [
+        "canmount"
+        "change-key"
+        "compression"
+        "create"
+        "destroy"
+        "hold"
+        "mount"
+        "mountpoint"
+        "receive"
+        "release"
+        "rollback"
+      ];
+      recvOptions = "u";  # don't auto-mount any new data sets
+      sendOptions = "w";  # raw send
+      service = { 
+        unitConfig = {
+          OnFailure = "notify-service-failure@%i.service";
+          OnSuccess = "notify-service-success@%i.service";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+        };
+      };
+    };
+
+    commands."local-quickemu-backup" = {
+      source = "rootpool/home/sirchia/quickemu";
+      target = "backuppool/backup/quickemu";
+      extraArgs = [
+        "--recursive"
         "--delete-target-snapshots"
         "--preserve-properties"
       ];
