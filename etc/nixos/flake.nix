@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-23.11";
+    nixpkgs.url = "nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     disko = { url = "github:nix-community/disko";
               inputs.nixpkgs.follows = "nixpkgs"; };
@@ -25,33 +25,33 @@
 				inherit inputs;
 			};
     
-      pkgs-bootstrap = import inputs.nixpkgs { inherit system; };
-
-			# create patched nixpkgs
-			nixpkgs-patched = pkgs-bootstrap.applyPatches {
-				name = "nixpkgs-patched";
-				src = inputs.nixpkgs;
-				patches = [ 
-          (pkgs-bootstrap.fetchpatch {
-                  name = "fix-oci-container-stop";
-                  url = "https://github.com/NixOS/nixpkgs/pull/248315.patch";
-                  sha256 = "sha256-MloB4h0nlyba88SAgdEVT9Ypxe31Hjo02oRnHtHIYZU=";
-          })
-       ];
-			};
-
-			# configure pkgs
-			pkgs = import nixpkgs-patched {
-				inherit system;
-				config = { allowUnfree = true;
-									 allowUnfreePredicate = (_: true); 
-                   packageOverrides = pkgs: {
-                     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-                   };
-        };
-			};
-
-      nixpkgs = (import "${nixpkgs-patched}/flake.nix").outputs { self = inputs.self; };
+#      pkgs-bootstrap = import inputs.nixpkgs { inherit system; };
+#
+#			# create patched nixpkgs
+#			nixpkgs-patched = pkgs-bootstrap.applyPatches {
+#				name = "nixpkgs-patched";
+#				src = inputs.nixpkgs;
+#				patches = [ 
+#          (pkgs-bootstrap.fetchpatch {
+#                  name = "fix-oci-container-stop";
+#                  url = "https://github.com/NixOS/nixpkgs/pull/248315.patch";
+#                  sha256 = "sha256-MloB4h0nlyba88SAgdEVT9Ypxe31Hjo02oRnHtHIYZU=";
+#          })
+#       ];
+#			};
+#
+#			# configure pkgs
+#			pkgs = import nixpkgs-patched {
+#				inherit system;
+#				config = { allowUnfree = true;
+#									 allowUnfreePredicate = (_: true); 
+#                   packageOverrides = pkgs: {
+#                     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+#                   };
+#        };
+#			};
+#
+#      nixpkgs = (import "${nixpkgs-patched}/flake.nix").outputs { self = inputs.self; };
 
 			# configure lib
 			# lib = nixpkgs.lib;
@@ -60,7 +60,7 @@
     nixosConfigurations.server = nixpkgs.lib.nixosSystem {
       inherit system; 
       inherit specialArgs;
-      inherit pkgs; # Inherit the patched pkgs
+#      inherit pkgs; # Inherit the patched pkgs
 
       modules = [
         ./hosts/server

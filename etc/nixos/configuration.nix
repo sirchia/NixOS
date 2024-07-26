@@ -237,7 +237,7 @@
   services.avahi = {
     enable = true;
     allowInterfaces = [ "enp2s0" "vlan40" ];
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true;
     publish = {
       enable = true;
@@ -277,13 +277,13 @@
     settings.PermitRootLogin = "no";
   };
   
-  snapraid = {
+  services.snapraid = {
     enable = true;
     contentFiles = [
-      "/mnt/disk1/snapraid-content"
-      "/mnt/disk2/snapraid-content"
-      "/mnt/disk3/snapraid-content"
-      "/mnt/disk4/snapraid-content"
+      "/mnt/disk1/snapraid/content"
+      "/mnt/disk2/snapraid/content"
+      "/mnt/disk3/snapraid/content"
+      "/mnt/disk4/snapraid/content"
     ];
     dataDisks = {
       d1 = "/mnt/disk1";
