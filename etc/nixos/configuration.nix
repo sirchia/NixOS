@@ -224,7 +224,7 @@
     snapraid
     quickemu
     unzip
-    p7zip
+    _7zz
   ];
 
   ############
