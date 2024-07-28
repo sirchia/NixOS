@@ -295,6 +295,7 @@
       "*.bak"
       "*.unrecoverable"
       "/tmp/"
+      "/Sync/"
       "/lost+found/"
       ".AppleDouble"
       "._AppleDouble"
@@ -404,6 +405,7 @@
     #extraArgs = [ "--verbose" "--debug" ];
 
     datasets = {
+      "disk4pool/disk4/Sync".useTemplate = [ "temporary" ];
       "rootpool" = {
         useTemplate = [ "none" ];
         recursive = true;
@@ -506,6 +508,49 @@
     commands."local-quickemu-backup" = {
       source = "rootpool/home/sirchia/quickemu";
       target = "backuppool/backup/quickemu";
+      extraArgs = [
+        "--recursive"
+        "--delete-target-snapshots"
+        "--preserve-properties"
+      ];
+      localSourceAllow = [
+        "bookmark"
+        "destroy"
+        "hold"
+        "mount"
+        "release"
+        "send"
+        "snapshot"
+      ];
+      localTargetAllow = [
+        "canmount"
+        "change-key"
+        "compression"
+        "create"
+        "destroy"
+        "hold"
+        "mount"
+        "mountpoint"
+        "receive"
+        "release"
+        "rollback"
+      ];
+      recvOptions = "u";  # don't auto-mount any new data sets
+      sendOptions = "w";  # raw send
+      service = { 
+        unitConfig = {
+          OnFailure = "notify-service-failure@%i.service";
+          OnSuccess = "notify-service-success@%i.service";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+        };
+      };
+    };
+
+    commands."local-sync-backup" = {
+      source = "disk4pool/disk4/Sync";
+      target = "backuppool/backup/Sync";
       extraArgs = [
         "--recursive"
         "--delete-target-snapshots"
