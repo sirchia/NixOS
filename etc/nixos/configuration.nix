@@ -2,6 +2,23 @@
 
 { config, pkgs, lib, inputs, pkgs-unstable, ... }:
 
+let
+  isUnstable = config.boot.zfs.package == pkgs.zfsUnstable;
+  zfsCompatibleKernelPackages = lib.filterAttrs (
+    name: kernelPackages:
+    (builtins.match "linux_[0-9]+_[0-9]+" name) != null
+    && (builtins.tryEval kernelPackages).success
+    && (
+      (!isUnstable && !kernelPackages.zfs.meta.broken)
+      || (isUnstable && !kernelPackages.zfs_unstable.meta.broken)
+    )
+  ) pkgs.linuxKernel.packages;
+  latestKernelPackage = lib.last (
+    lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)) (
+      builtins.attrValues zfsCompatibleKernelPackages
+    )
+  );
+in
 {
   imports =
     [
@@ -40,7 +57,7 @@
     "netconsole"
   ];
   boot.extraModprobeConfig = "options netconsole netconsole=@192.168.1.2/eth1,6666@192.168.1.7/";
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages = latestKernelPackage;
   boot.kernelParams = [ 
     "panic=5"
   ];
