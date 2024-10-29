@@ -361,33 +361,32 @@ in
 
   services.samba = {
     enable = true;
-    enableNmbd = false;
-    enableWinbindd = false;
+    nmbd.enable = false;
+    winbindd.enable = false;
     openFirewall = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = Home
-      server string = NixOS
-      netbios name = NixOS
-      security = user
-      guest ok = no
-      guest account = nobody
-      map to guest = bad user
-      load printers = no
-      passdb backend = tdbsam:/persist/etc/samba/passdb.tdb
-      fruit:aapl = yes
-      fruit:advertise_fullsync = true
-      fruit:metadata = stream
-      fruit:model = MacPro7,1
-      vfs objects = catia fruit streams_xattr acl_xattr
-      min protocol = SMB2
-      use sendfile = yes
-      allow insecure wide links = yes
-    '';
-    shares = {
-      storage = {
-        path = "/mnt/storage";
-        browseable = "yes";
+    settings = {
+      global = {
+        "workgroup" = "Home";
+        "server string" = "NixOS";
+        "netbios name" = "NixOS";
+        "security" = "user";
+        "guest ok" = "no";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        "load printers" = "no";
+        "passdb backend" = "tdbsam:/persist/etc/samba/passdb.tdb";
+        "fruit:aapl" = "yes";
+        "fruit:advertise_fullsync" = "true";
+        "fruit:metadata" = "stream";
+        "fruit:model" = "MacPro7,1";
+        "vfs objects" = "catia fruit streams_xattr acl_xattr";
+        "min protocol" = "SMB2";
+        "use sendfile" = "yes";
+        "allow insecure wide links" = "yes";
+      };
+      "storage" = {
+        "path" = "/mnt/storage";
+        "browseable" = "yes";
         "read only" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
@@ -396,14 +395,14 @@ in
         #"force user" = "timemachine";
         #"force group" = "timemachine";
       };
-      timemachine = {
-        path = "/mnt/backup/TimeMachine";
+      "timemachine" = {
+        "path" = "/mnt/backup/TimeMachine";
         "valid users" = "timemachine";
 
-        #public = "no";
-        browseable = "yes";
+        #"public" = "no";
+        "browseable" = "yes";
 
-        writable = "yes";
+        "writable" = "yes";
         "read only" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
