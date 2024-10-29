@@ -137,6 +137,7 @@
       TZ = "Europe/Amsterdam";
       UMASK = "002";
     };
+    autoStart = false;
     volumes = [
       "/dev/disk:/dev/disk:rw"
     ];
@@ -168,12 +169,12 @@
     requires = [
       "podman-network-reverse-proxy.service"
     ];
-    partOf = [
-      "podman-compose-infra-root.target"
-    ];
-    wantedBy = [
-      "podman-compose-infra-root.target"
-    ];
+    #partOf = [
+    #  "podman-compose-infra-root.target"
+    #];
+    #wantedBy = [
+    #  "podman-compose-infra-root.target"
+    #];
   };
   virtualisation.oci-containers.containers."omada" = {
     image = "docker.io/mbentley/omada-controller:latest";
