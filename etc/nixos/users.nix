@@ -16,7 +16,8 @@ in
   users.users.sirchia = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "video" "audio" "docker" "sirchia" ];
+    group = "sirchia";
+    extraGroups = [ "wheel" "video" "audio" "docker" "users" ];
     shell = pkgs.fish;
     # This gives a default empty password
     # initialHashedPassword = "";
@@ -31,7 +32,8 @@ in
   users.users.functionary = {
     isNormalUser = true;
     uid = 1003;
-    extraGroups = [ "functionary" ];
+    group = "functionary";
+    extraGroups = [ "users" ];
     shell = pkgs.fish;
     # This gives a default empty password
     # initialHashedPassword = "";
@@ -50,8 +52,26 @@ in
 
   users.groups.sirchia.gid = 1000;
   users.groups.functionary.gid = 1003;
-  users.groups.timemachine = { };
+  users.groups.timemachine.gid = 991;
  
+  # Definition of system/service uid/gid for persistent ID allocation across reconfigurations
+  users.users.avahi.uid=999;
+  users.users.nscd.uid=998;
+  users.users.sshd.uid=997;
+  users.users.syncoid.uid=996;
+  users.users.systemd-oom.uid=995;
+  users.users.timemachine.uid=994;
+  
+  users.groups.avahi.gid=999;
+  users.groups.nscd.gid=998;
+  users.groups.podman.gid=997;
+  users.groups.polkituser.gid=996;
+  users.groups.sshd.gid=995;
+  users.groups.syncoid.gid=994;
+  users.groups.systemd-coredump.gid=993;
+  users.groups.systemd-oom.gid=992;
+
+
   # doas rules
   security.doas.extraRules = [
     # { groups = [ "wheel" ]; keepEnv = true; noPass = true; cmd = "nix-channel"; args = [ "--list" ]; }
@@ -60,3 +80,4 @@ in
     { users = [ "sirchia" ]; keepEnv = true; noPass = true; cmd = "reboot"; }
   ];
 }
+
