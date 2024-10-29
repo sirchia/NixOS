@@ -405,6 +405,10 @@
     #extraArgs = [ "--verbose" "--debug" ];
 
     datasets = {
+      "disk1pool/disk1".useTemplate = [ "temporary" ];
+      "disk2pool/disk2".useTemplate = [ "temporary" ];
+      "disk3pool/disk3".useTemplate = [ "temporary" ];
+      "disk4pool/disk4".useTemplate = [ "temporary" ];
       "disk4pool/disk4/Sync".useTemplate = [ "temporary" ];
       "rootpool" = {
         useTemplate = [ "none" ];
@@ -417,6 +421,7 @@
       };
       "rootpool/home/sirchia/quickemu".useTemplate = [ "temporary" ];
       "rootpool/local/root".useTemplate = [ "temporary" ];
+      "rootpool/local/var/lib/nixos".useTemplate = [ "temporary" ];
       "rootpool/persist".useTemplate = [ "backup" ];
       "rootpool/workload" = {
         useTemplate = [ "temporary" ];
