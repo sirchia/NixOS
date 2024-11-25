@@ -25,7 +25,7 @@
       ExecStop = "${pkgs.podman}/bin/podman network rm -f reverse-proxy";
     };
     script = ''
-      podman network inspect reverse-proxy || podman network create reverse-proxy --opt isolate=true
+      podman network inspect reverse-proxy || podman network create reverse-proxy --opt isolate=false
     '';
     partOf = [ "podman-compose-root.target" ];
     wantedBy = [ "podman-compose-root.target" ];
