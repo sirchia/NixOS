@@ -85,7 +85,7 @@
     ];
   };
   virtualisation.oci-containers.containers."vault" = {
-    image = "docker.io/vaultwarden/server:latest";
+    image = "ghcr.io/dani-garcia/vaultwarden:alpine";
     environment = {
       PGID = "1003";
       PUID = "1003";
