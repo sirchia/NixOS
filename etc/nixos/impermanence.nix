@@ -1,6 +1,6 @@
-# btrfs/impermanence.nix
+# impermanence.nix
 
-{ config, pkgs, impermanence, ... }:
+{ config, pkgs, ... }:
 
 {
   # filesystem modifications needed for impermanence

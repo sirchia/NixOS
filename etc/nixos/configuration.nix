@@ -1,7 +1,24 @@
 # configuration.nix
 
-{ config, pkgs, lib, inputs, pkgs-unstable, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
+let
+  isUnstable = config.boot.zfs.package == pkgs.zfsUnstable;
+  zfsCompatibleKernelPackages = lib.filterAttrs (
+    name: kernelPackages:
+    (builtins.match "linux_[0-9]+_[0-9]+" name) != null
+    && (builtins.tryEval kernelPackages).success
+    && (
+      (!isUnstable && !kernelPackages.zfs.meta.broken)
+      || (isUnstable && !kernelPackages.zfs_unstable.meta.broken)
+    )
+  ) pkgs.linuxKernel.packages;
+  latestKernelPackage = lib.last (
+    lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)) (
+      builtins.attrValues zfsCompatibleKernelPackages
+    )
+  );
+in
 {
   imports =
     [
@@ -20,8 +37,16 @@
   
   ### Nix options
   ###############
-  # Re-use nixpkgs from flake for nix commands
+  # make `nix run nixpkgs#nixpkgs` use the same nixpkgs as the one used by this flake.
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  # remove nix-channel related tools & configs, we use flakes instead.
+  nix.channel.enable = false;
+
+  # but NIX_PATH is still used by many useful tools, so we set it to the same value as the one used by this flake.
+  # Make `nix repl '<nixpkgs>'` use the same nixpkgs as the one used by this flake.
+  environment.etc."nix/inputs/nixpkgs".source = "${inputs.nixpkgs}";
+  # https://github.com/NixOS/nix/issues/9574
+  nix.settings.nix-path = lib.mkForce "nixpkgs=/etc/nix/inputs/nixpkgs";
 
   # Enable flakes & new syntax
   nix.extraOptions = ''
@@ -29,7 +54,7 @@
     extra-experimental-features = flakes
   '';
 
-  boot.consoleLogLevel = 7;
+  # boot.consoleLogLevel = 7;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.generationsDir.copyKernels = true;
   boot.loader.systemd-boot.enable = true;
@@ -40,7 +65,7 @@
     "netconsole"
   ];
   boot.extraModprobeConfig = "options netconsole netconsole=@192.168.1.2/eth1,6666@192.168.1.7/";
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages = latestKernelPackage;
   boot.kernelParams = [ 
     "panic=5"
   ];
@@ -344,33 +369,32 @@
 
   services.samba = {
     enable = true;
-    enableNmbd = false;
-    enableWinbindd = false;
+    nmbd.enable = false;
+    winbindd.enable = false;
     openFirewall = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = Home
-      server string = NixOS
-      netbios name = NixOS
-      security = user
-      guest ok = no
-      guest account = nobody
-      map to guest = bad user
-      load printers = no
-      passdb backend = tdbsam:/persist/etc/samba/passdb.tdb
-      fruit:aapl = yes
-      fruit:advertise_fullsync = true
-      fruit:metadata = stream
-      fruit:model = MacPro7,1
-      vfs objects = catia fruit streams_xattr acl_xattr
-      min protocol = SMB2
-      use sendfile = yes
-      allow insecure wide links = yes
-    '';
-    shares = {
-      storage = {
-        path = "/mnt/storage";
-        browseable = "yes";
+    settings = {
+      global = {
+        "workgroup" = "Home";
+        "server string" = "NixOS";
+        "netbios name" = "NixOS";
+        "security" = "user";
+        "guest ok" = "no";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        "load printers" = "no";
+        "passdb backend" = "tdbsam:/persist/etc/samba/passdb.tdb";
+        "fruit:aapl" = "yes";
+        "fruit:advertise_fullsync" = "true";
+        "fruit:metadata" = "stream";
+        "fruit:model" = "MacPro7,1";
+        "vfs objects" = "catia fruit streams_xattr acl_xattr";
+        "min protocol" = "SMB2";
+        "use sendfile" = "yes";
+        "allow insecure wide links" = "yes";
+      };
+      "storage" = {
+        "path" = "/mnt/storage";
+        "browseable" = "yes";
         "read only" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
@@ -379,14 +403,14 @@
         #"force user" = "timemachine";
         #"force group" = "timemachine";
       };
-      timemachine = {
-        path = "/mnt/backup/TimeMachine";
+      "timemachine" = {
+        "path" = "/mnt/backup/TimeMachine";
         "valid users" = "timemachine";
 
-        #public = "no";
-        browseable = "yes";
+        #"public" = "no";
+        "browseable" = "yes";
 
-        writable = "yes";
+        "writable" = "yes";
         "read only" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
